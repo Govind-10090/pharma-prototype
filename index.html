@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kirti Pharma — Medicines Delivered in Gondia, Maharashtra</title>
+  <meta name="description" content="Order genuine medicines online from Kirti Pharma, Gondia. Same-day delivery, easy WhatsApp ordering, and prescription upload. Trusted since 2010.">
+  <meta name="keywords" content="pharmacy Gondia, medicine delivery Gondia, online pharmacy Maharashtra, Kirti Pharma">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+<style>
+html,
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+}
+
+/* Full-page background */
+body {
+    background-image: url('images/bg.jpeg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: 90% top;
+    background-attachment: fixed;
+}
+
+/* Light overlay */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+  
+    z-index: -1;
+}
+
+/* Make major sections transparent */
+.container,
+.page-content,
+.circular-categories-section {
+    background: transparent;
+}
+
+/* Hero section glass effect */
+.hero-left,
+.promo-carousel {
+    backdrop-filter: blur(8px);
+    background: rgba(255,255,255,0.75);
+    border-radius: 24px;
+    padding: 24px;
+}
+
+/* Category section */
+.circular-categories-section {
+    backdrop-filter: blur(8px);
+    background: rgba(255,255,255,0.70);
+    border-radius: 24px;
+    padding: 24px;
+}
+
+/* Medicine cards */
+.medicine-card {
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(6px);
+}
+
+
+
+</style>
+</head>
+<body>
+
+<!-- TOP UTILITY BAR -->
+<div class="top-bar">
+  <div class="top-bar-inner container">
+    <span style="display: flex; align-items: center; gap: 6px;">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="#00a76f" stroke="#00a76f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+      Gondia's Trusted Retail Chemist Since 2010
+    </span>
+    <span class="top-bar-right">
+      <span style="display: flex; align-items: center; gap: 4px;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+        Call Us: +91 98765 43210
+      </span>
+      <span style="opacity: 0.4;">|</span>
+      <span style="display: flex; align-items: center; gap: 4px;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+        Same-Day Delivery
+      </span>
+    </span>
+  </div>
+</div>
+
+<!-- NAVBAR -->
+<nav class="navbar" role="navigation" aria-label="Main navigation">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo" aria-label="Kirti Pharma Home">
+      <img src="images/kirti-logo.png" alt="Kirti Pharma" class="nav-logo-img">
+    </a>
+    
+    <!-- Deliver-to Pincode -->
+    <div class="nav-location-select" onclick="openPincodeModal()" aria-label="Select delivery location" title="Change pincode" style="padding: 4px 10px;">
+      <span class="nav-location-label" style="font-size: 10px; font-weight: 600; color: #6b7280; text-transform: uppercase;">Deliver to</span>
+      <span class="nav-location-val" id="nav-pincode-display" style="font-size: 14px; font-weight: 700; color: #111827;">Gondia - 441614</span>
+    </div>
+
+
+    <!-- Centered Search Autocomplete -->
+    <div class="nav-search-container" style="flex: 1; margin: 0 20px; max-width: 600px;">
+      <span class="nav-search-icon" style="left: 16px; color: #6b7280;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+      </span>
+      <input
+        type="search"
+        id="search-input"
+        class="nav-search-bar"
+        placeholder="Search by medicine name, salt or brand..."
+        autocomplete="off"
+        aria-label="Search medicines"
+        style="padding-left: 44px; padding-right: 44px; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 12px; height: 44px; box-shadow: 0 1px 2px rgba(0,0,0,0.05);"
+      >
+      <button class="nav-mic-btn" id="mic-btn" aria-label="Voice search" title="Search by voice" style="right: 12px;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
+      </button>
+      
+      <!-- Suggestions Dropdown -->
+      <div class="search-autocomplete-dropdown" id="search-suggest-dropdown"></div>
+    </div>
+
+    <div class="nav-right" style="gap: 12px;">
+      <a href="prescription.html" class="btn-nav-upload" style="border: 1px solid #d1d5db; color: #374151; font-weight: 600; padding: 8px 16px; border-radius: 8px; display: flex; align-items: center; gap: 8px; text-decoration: none; font-size: 14px; background: white;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg>
+        Upload Rx
+      </a>
+      
+      <!-- Cart Icon -->
+      <a href="cart.html" class="nav-cart-btn" aria-label="View cart" id="nav-cart-link" style="background: #f3f4f6; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; text-decoration: none; border: none;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4b5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+        <span class="cart-badge" style="display:none">0</span>
+      </a>
+      
+      <!-- Login / Account Dropdown -->
+      <a href="#" class="btn-login" id="nav-login-btn" onclick="openLoginModal(event)" style="background: #006642; color: white; border-radius: 8px; padding: 8px 24px; font-weight: 600; text-decoration: none; font-size: 14px;">Login</a>
+      <div class="nav-user-dropdown" id="nav-user-dropdown" style="display:none">
+        <button class="nav-user-btn" id="nav-user-name" onclick="toggleUserDropdown(event)">👤 Account</button>
+        <div class="dropdown-menu" id="nav-user-menu">
+          <a href="dashboard.html" class="dropdown-item">🧑‍⚕️ Chemist Dashboard</a>
+          <a href="track.html" class="dropdown-item">📦 Track Orders</a>
+          <div style="border-top:1px solid var(--border);margin:4px 0"></div>
+          <button class="dropdown-item" onclick="logoutUser()">Logout</button>
+        </div>
+      </div>
+    </div>
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- MOBILE NAV DRAWER -->
+<div class="mobile-nav-drawer" id="mobile-drawer">
+  <a href="index.html" class="active">🏠 Home</a>
+  <a href="index.html#medicine-section">💊 Medicines</a>
+  <a href="prescription.html">📋 Upload Prescription</a>
+  <a href="track.html">📦 Track Order</a>
+  <div class="mobile-nav-divider"></div>
+  <a href="cart.html">🛒 Cart</a>
+  <a href="dashboard.html">🧑‍⚕️ Dashboard</a>
+  <a href="#login">👤 Login</a>
+</div>
+
+<!-- HERO SECTION -->
+<section class="container" style="margin-top: 28px;">
+  <div style="display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 32px; align-items: center;" id="hero-layout">
+    
+    <!-- Hero Text (Left) -->
+    <div class="hero-left">
+      <div style="display: inline-flex; align-items: center; gap: 8px; background: var(--saffron-light); color: #c2410c; padding: 6px 14px; border-radius: var(--radius-pill); font-size: 0.78rem; font-weight: 700; margin-bottom: 18px;">
+        ⭐⭐⭐⭐⭐ 4.9 · Gondia's No.1 Rated Pharmacy
+      </div>
+      <h1 style="font-size: clamp(2rem, 3.5vw, 2.75rem); color: var(--green-primary); font-weight: 800; line-height: 1.15; margin-bottom: 16px;">
+        Genuine Medicines,<br>Delivered <span style="color: var(--saffron)">Same Day.</span>
+      </h1>
+      <p style="font-size: 1rem; color: var(--text-muted); margin-bottom: 28px; max-width: 480px; line-height: 1.6;">
+        Order genuine medicines online from Kirti Pharma. Upload your doctor's prescription or browse our extensive catalogue for express delivery in Gondia, MH.
+      </p>
+      <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+        <a href="prescription.html" class="btn btn-primary btn-lg" style="box-shadow: 0 4px 14px rgba(0, 102, 66, 0.25);">
+          📋 Upload Prescription
+        </a>
+        <a href="#medicine-section" class="btn btn-secondary btn-lg">
+          💊 Browse Medicines
+        </a>
+      </div>
+    </div>
+
+    <!-- Promo Carousel (Right) -->
+    <div class="promo-carousel" id="promo-carousel">
+      <div class="carousel-track" id="carousel-track">
+        <!-- Slide 1 -->
+        <div class="carousel-slide" style="background: linear-gradient(135deg, #006642 0%, #004D32 100%);">
+          <div class="carousel-slide-content">
+            <div style="font-size: 0.75rem; font-weight: 700; background: rgba(255,255,255,0.2); display: inline-block; padding: 4px 10px; border-radius: 99px; margin-bottom: 12px; letter-spacing: 0.05em; text-transform: uppercase;">Regular Medication?</div>
+            <h2>Save up to 15%</h2>
+            <p>Subscribe to auto-delivery every 30 days. Strip-cutting benefits and free delivery included.</p>
+            <a href="#subscriptions" class="btn btn-saffron btn-sm">Explore Subscriptions</a>
+          </div>
+          <div style="position: absolute; right: 20px; bottom: 10px; font-size: 8rem; opacity: 0.15; pointer-events: none;">♻️</div>
+        </div>
+        <!-- Slide 2 -->
+        <div class="carousel-slide" style="background: linear-gradient(135deg, #F37A20 0%, #d95f07 100%);">
+          <div class="carousel-slide-content">
+            <div style="font-size: 0.75rem; font-weight: 700; background: rgba(255,255,255,0.25); display: inline-block; padding: 4px 10px; border-radius: 99px; margin-bottom: 12px; letter-spacing: 0.05em; text-transform: uppercase;">Quick Order</div>
+            <h2>Order via Rx Photo</h2>
+            <p>Just upload prescription photo. Our pharmacist will verify and call you back in 15 mins.</p>
+            <a href="prescription.html" class="btn btn-primary btn-sm" style="background: white; color: var(--green-primary); border: none;">Upload Now</a>
+          </div>
+          <div style="position: absolute; right: 20px; bottom: 10px; font-size: 8rem; opacity: 0.15; pointer-events: none;">📋</div>
+        </div>
+        <!-- Slide 3 -->
+        <div class="carousel-slide" style="background: linear-gradient(135deg, #1D4ED8 0%, #1e40af 100%);">
+          <div class="carousel-slide-content">
+            <div style="font-size: 0.75rem; font-weight: 700; background: rgba(255,255,255,0.2); display: inline-block; padding: 4px 10px; border-radius: 99px; margin-bottom: 12px; letter-spacing: 0.05em; text-transform: uppercase;">Health & Supplements</div>
+            <h2>Vitamins up to 20% OFF</h2>
+            <p>Shelcal, Becosules, Zincovit & Evion in stock. Boost your daily immunity today.</p>
+            <a href="#" onclick="selectCategorySuggestion('Vitamins & Supplements')" class="btn btn-saffron btn-sm">Shop Immunity</a>
+          </div>
+          <div style="position: absolute; right: 20px; bottom: 10px; font-size: 8rem; opacity: 0.15; pointer-events: none;">🍊</div>
+        </div>
+      </div>
+      <!-- Dots -->
+      <div class="carousel-dots" id="carousel-dots">
+        <span class="carousel-dot active" onclick="setCarouselSlide(0)"></span>
+        <span class="carousel-dot" onclick="setCarouselSlide(1)"></span>
+        <span class="carousel-dot" onclick="setCarouselSlide(2)"></span>
+      </div>
+      <!-- Arrows -->
+      <button class="carousel-btn carousel-prev" onclick="prevCarouselSlide()">‹</button>
+      <button class="carousel-btn carousel-next" onclick="nextCarouselSlide()">›</button>
+    </div>
+
+  </div>
+</section>
+
+<!-- CIRCULAR CATEGORIES SECTION -->
+<section class="container circular-categories-section" style="margin-top: 40px;">
+  <div class="circular-categories-title">
+    <span>📂</span> Shop by Category
+  </div>
+  <div class="circular-categories-grid">
+    <div class="category-circle-item" onclick="selectCategorySuggestion('Fever & Pain')">
+      <div class="category-circle" style="background: #fee2e2; color: #ef4444;">💊</div>
+      <span class="category-circle-label">Fever & Pain</span>
+    </div>
+    <div class="category-circle-item" onclick="selectCategorySuggestion('Chronic Care')">
+      <div class="category-circle" style="background: #ede9fe; color: #8b5cf6;">♻️</div>
+      <span class="category-circle-label">Chronic Care</span>
+    </div>
+    <div class="category-circle-item" onclick="selectCategorySuggestion('Antibiotics')">
+      <div class="category-circle" style="background: #fef3c7; color: #f59e0b;">🧬</div>
+      <span class="category-circle-label">Antibiotics</span>
+    </div>
+    <div class="category-circle-item" onclick="selectCategorySuggestion('Vitamins & Supplements')">
+      <div class="category-circle" style="background: #fff7ed; color: #f97316;">🍊</div>
+      <span class="category-circle-label">Vitamins</span>
+    </div>
+    <div class="category-circle-item" onclick="selectCategorySuggestion('Skincare')">
+      <div class="category-circle" style="background: #fce7f3; color: #ec4899;">🧴</div>
+      <span class="category-circle-label">Skincare</span>
+    </div>
+    <div class="category-circle-item" onclick="selectCategorySuggestion('Baby Care')">
+      <div class="category-circle" style="background: #e0f2fe; color: #06b6d4;">👶</div>
+      <span class="category-circle-label">Baby Care</span>
+    </div>
+    <div class="category-circle-item" onclick="selectCategorySuggestion('ENT')">
+      <div class="category-circle" style="background: #f0fdf4; color: #10b981;">👃</div>
+      <span class="category-circle-label">ENT Care</span>
+    </div>
+    <div class="category-circle-item" onclick="selectCategorySuggestion('Gastro')">
+      <div class="category-circle" style="background: #ecfdf5; color: #059669;">🧪</div>
+      <span class="category-circle-label">Gastro Care</span>
+    </div>
+  </div>
+</section>
+
+<!-- MAIN CONTENT -->
+<main id="medicine-section" class="container page-content" style="padding-top: 16px;">
+
+  <!-- CHRONIC CARE BANNER -->
+  <div class="chronic-banner" id="subscriptions" style="margin-top:8px;margin-bottom:32px;background:linear-gradient(135deg,#1A6B3C 0%,#0D4A25 100%);border:none;box-shadow:0 8px 32px rgba(26,107,60,0.2)">
+    <div class="chronic-banner-text">
+      <h3 style="color:white">♻️ On regular medication?</h3>
+      <p style="color:rgba(255,255,255,0.82)">Subscribe for auto-delivery every 30 days and get strip-cutting benefits, reminders, and exclusive discounts on your chronic medicines.</p>
+    </div>
+    <a href="#subscriptions" class="btn btn-saffron" style="background:#F5A623;color:white;padding:16px 32px;border-radius:12px;text-decoration:none;font-weight:700;flex-shrink:0;white-space:nowrap;box-shadow:0 4px 16px rgba(245,166,35,0.35)">
+      Explore Subscriptions →
+    </a>
+  </div>
+
+  <!-- CATEGORY PILLS -->
+  <div style="margin-bottom:24px">
+    <div id="category-pills" class="category-pills" role="tablist" aria-label="Filter by category">
+      <!-- Rendered by search.js -->
+    </div>
+  </div>
+
+  <!-- MEDICINE GRID HEADER -->
+  <div class="section-header" style="margin-bottom:20px">
+    <div>
+      <h2 class="section-title" style="font-size:1.5rem;font-weight:800;letter-spacing:-0.02em">Our Medicines</h2>
+      <div style="width:40px;height:3px;background:linear-gradient(90deg,#1A6B3C,#F5A623);border-radius:99px;margin-top:6px"></div>
+    </div>
+    <span class="section-count" id="medicine-count">Loading...</span>
+  </div>
+
+  <!-- MEDICINE GRID -->
+  <div class="medicine-grid" id="medicine-grid" role="list" aria-label="Medicine catalogue">
+    <!-- Rendered by search.js -->
+  </div>
+
+  <!-- LOAD MORE CONTAINER -->
+  <div id="load-more-container" style="text-align:center;margin-top:32px;margin-bottom:32px"></div>
+
+  <!-- HOW IT WORKS -->
+  <div style="margin-top:64px" id="contact">
+    <div style="text-align:center;margin-bottom:32px">
+      <h2 style="font-size:1.5rem;font-weight:800;letter-spacing:-0.02em;margin-bottom:8px">How it works</h2>
+      <div style="width:40px;height:3px;background:linear-gradient(90deg,#1A6B3C,#F5A623);border-radius:99px;margin:0 auto 10px"></div>
+      <p style="color:var(--text-muted);font-size:0.9rem">Ordering medicine has never been simpler</p>
+    </div>
+    <div class="steps-row" style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
+      <div class="card" style="padding:28px 20px;text-align:center;border-top:4px solid var(--green-primary)">
+        <div style="width:52px;height:52px;background:linear-gradient(135deg,#1A6B3C,#2D9157);color:white;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;margin:0 auto 16px;box-shadow:0 4px 14px rgba(26,107,60,0.28)">🔍</div>
+        <div class="step-title" style="font-size:1rem;font-weight:700;margin-bottom:8px">Search &amp; Add</div>
+        <div class="step-desc">Search by medicine name or salt. Add to cart or upload a prescription.</div>
+      </div>
+      <div class="card" style="padding:28px 20px;text-align:center;border-top:4px solid var(--saffron)">
+        <div style="width:52px;height:52px;background:linear-gradient(135deg,#F5A623,#E88500);color:white;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;margin:0 auto 16px;box-shadow:0 4px 14px rgba(245,166,35,0.3)">💳</div>
+        <div class="step-title" style="font-size:1rem;font-weight:700;margin-bottom:8px">Choose Payment</div>
+        <div class="step-desc">Pay via Google Pay, PhonePe, Paytm or BHIM UPI. Safe &amp; fast.</div>
+      </div>
+      <div class="card" style="padding:28px 20px;text-align:center;border-top:4px solid #3B82F6">
+        <div style="width:52px;height:52px;background:linear-gradient(135deg,#3B82F6,#1D4ED8);color:white;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;margin:0 auto 16px;box-shadow:0 4px 14px rgba(59,130,246,0.28)">🚴</div>
+        <div class="step-title" style="font-size:1rem;font-weight:700;margin-bottom:8px">Home Delivery</div>
+        <div class="step-desc">Same-day delivery across Gondia. Track your order in real time.</div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- ALTERNATIVES MODAL -->
+<div class="modal-overlay" id="alt-modal" role="dialog" aria-modal="true" aria-labelledby="alt-modal-title">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3 class="modal-title" id="alt-modal-title">Alternatives</h3>
+      <button class="modal-close" onclick="closeModal('alt-modal')" aria-label="Close modal">✕</button>
+    </div>
+    <div class="modal-body" id="alt-modal-body"></div>
+  </div>
+</div>
+
+<!-- BOTTOM TAB BAR -->
+<nav class="bottom-tab-bar" aria-label="Mobile navigation">
+  <div class="tab-bar-inner">
+    <a href="index.html" class="tab-item active">
+      <span class="tab-icon">🏠</span>
+      <span>Home</span>
+    </a>
+    <a href="cart.html" class="tab-item" id="tab-cart">
+      <span class="tab-icon" style="position:relative">
+        🛒
+        <span class="tab-cart-badge" style="display:none">0</span>
+      </span>
+      <span>Cart</span>
+    </a>
+    <a href="prescription.html" class="tab-item">
+      <span class="tab-icon">📋</span>
+      <span>Rx</span>
+    </a>
+    <a href="track.html" class="tab-item">
+      <span class="tab-icon">📦</span>
+      <span>Track</span>
+    </a>
+    <a href="dashboard.html" class="tab-item">
+      <span class="tab-icon">🧑‍⚕️</span>
+      <span>Staff</span>
+    </a>
+  </div>
+</nav>
+
+<!-- FLOATING WHATSAPP -->
+<a href="https://wa.me/919876543210?text=Hi%20Kirti%20Pharma%2C%20I%20want%20to%20place%20a%20medicine%20order."
+   class="whatsapp-fab"
+   target="_blank"
+   rel="noopener noreferrer"
+   aria-label="Order on WhatsApp"
+   id="whatsapp-fab">
+  <span class="whatsapp-fab-icon">💬</span>
+  <span class="whatsapp-fab-text">Order on WhatsApp</span>
+</a>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo-text"><span>🌿</span> Kirti Pharma</div>
+        <p>Your trusted neighbourhood pharmacy in Gondia, Maharashtra. Genuine medicines, fast delivery, and expert guidance since 2010.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Quick Links</h5>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="index.html#medicine-section">Medicines</a></li>
+          <li><a href="prescription.html">Upload Prescription</a></li>
+          <li><a href="track.html">Track Order</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Categories</h5>
+        <ul>
+          <li><a href="#">Fever & Pain</a></li>
+          <li><a href="#">Chronic Care</a></li>
+          <li><a href="#">Vitamins</a></li>
+          <li><a href="#">Baby Care</a></li>
+        </ul>
+      </div>
+      <div class="footer-col footer-contact">
+        <h5>Contact Us</h5>
+        <p><span>📍</span> Shop No. 12, Gandhi Chowk, Gondia, Maharashtra 441614</p>
+        <p><span>📞</span> +91 98765 43210</p>
+        <p><span>🕐</span> Mon–Sat: 8AM – 9PM</p>
+        <p><span>🕐</span> Sunday: 9AM – 1PM</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2024 Kirti Pharma. All rights reserved. Drug Licence No. MH-GND-2010-DL-04782.</p>
+      <p>Made with 💚 for Gondia</p>
+    </div>
+  </div>
+</footer>
+
+<script src="js/app.js"></script>
+<script src="js/medicines.js"></script>
+<script src="js/search.js"></script>
+<script>
+// ===== PROMO CAROUSEL LOGIC =====
+let currentCarouselSlide = 0;
+let carouselTimer = null;
+
+function setCarouselSlide(idx) {
+  const track = document.getElementById('carousel-track');
+  const dots = document.querySelectorAll('.carousel-dot');
+  if (!track || dots.length === 0) return;
+  
+  const totalSlides = track.children.length;
+  currentCarouselSlide = (idx + totalSlides) % totalSlides;
+  
+  track.style.transform = `translateX(-${currentCarouselSlide * 100}%)`;
+  
+  dots.forEach((dot, i) => {
+    dot.classList.toggle('active', i === currentCarouselSlide);
+  });
+}
+
+function nextCarouselSlide() {
+  setCarouselSlide(currentCarouselSlide + 1);
+}
+
+function prevCarouselSlide() {
+  setCarouselSlide(currentCarouselSlide - 1);
+}
+
+function startCarouselAutoPlay() {
+  stopCarouselAutoPlay();
+  carouselTimer = setInterval(nextCarouselSlide, 4500);
+}
+
+function stopCarouselAutoPlay() {
+  if (carouselTimer) clearInterval(carouselTimer);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  startCarouselAutoPlay();
+  const carousel = document.getElementById('promo-carousel');
+  if (carousel) {
+    carousel.addEventListener('mouseenter', stopCarouselAutoPlay);
+    carousel.addEventListener('mouseleave', startCarouselAutoPlay);
+  }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cart & Checkout — Kirti Pharma</title>
+  <meta name="description" content="Review your cart and checkout securely with Google Pay, PhonePe, Paytm or BHIM UPI. Same-day delivery in Gondia.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+
+<!-- TOP UTILITY BAR -->
+<div class="top-bar">
+  <div class="top-bar-inner container">
+    <span>🏬 Gondia's Trusted Retail Chemist Since 2010</span>
+    <span class="top-bar-right">
+      <span>📞 Call Us: +91 98765 43210</span>
+      <span style="opacity: 0.4;">|</span>
+      <span>🚴 Same-Day Delivery</span>
+    </span>
+  </div>
+</div>
+
+<!-- NAVBAR -->
+<nav class="navbar" role="navigation" aria-label="Main navigation">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo" aria-label="Kirti Pharma Home">
+      <img src="images/kirti-logo.png" alt="Kirti Pharma" class="nav-logo-img">
+    </a>
+    
+    <!-- Deliver-to Pincode -->
+    <div class="nav-location-select" onclick="openPincodeModal()" aria-label="Select delivery location" title="Change pincode">
+      <span class="nav-location-label">Deliver to</span>
+      <span class="nav-location-val" id="nav-pincode-display">📍 Gondia - 441614 ▾</span>
+    </div>
+
+    <!-- Centered Search Autocomplete -->
+    <div class="nav-search-container">
+      <span class="nav-search-icon">🔍</span>
+      <input
+        type="search"
+        id="search-input"
+        class="nav-search-bar"
+        placeholder="Search by medicine name, salt or brand..."
+        autocomplete="off"
+        aria-label="Search medicines"
+      >
+      <button class="nav-mic-btn" id="mic-btn" aria-label="Voice search" title="Search by voice">🎤</button>
+      
+      <!-- Suggestions Dropdown -->
+      <div class="search-autocomplete-dropdown" id="search-suggest-dropdown"></div>
+    </div>
+
+    <div class="nav-right">
+      <a href="prescription.html" class="btn-nav-upload">📋 Upload Rx</a>
+      
+      <!-- Cart Icon -->
+      <a href="cart.html" class="nav-cart-btn active" aria-label="View cart" id="nav-cart-link">
+        🛒
+        <span class="cart-badge" style="display:none">0</span>
+      </a>
+      
+      <!-- Login / Account Dropdown -->
+      <a href="#" class="btn-login" id="nav-login-btn" onclick="openLoginModal(event)">Login</a>
+      <div class="nav-user-dropdown" id="nav-user-dropdown" style="display:none">
+        <button class="nav-user-btn" id="nav-user-name" onclick="toggleUserDropdown(event)">👤 Account</button>
+        <div class="dropdown-menu" id="nav-user-menu">
+          <a href="dashboard.html" class="dropdown-item">🧑‍⚕️ Chemist Dashboard</a>
+          <a href="track.html" class="dropdown-item">📦 Track Orders</a>
+          <div style="border-top:1px solid var(--border);margin:4px 0"></div>
+          <button class="dropdown-item" onclick="logoutUser()">Logout</button>
+        </div>
+      </div>
+    </div>
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<div class="mobile-nav-drawer" id="mobile-drawer">
+  <a href="index.html">🏠 Home</a>
+  <a href="index.html#medicine-section">💊 Medicines</a>
+  <a href="prescription.html">📋 Upload Prescription</a>
+  <a href="track.html">📦 Track Order</a>
+  <div class="mobile-nav-divider"></div>
+  <a href="cart.html" class="active">🛒 Cart</a>
+  <a href="dashboard.html">🧑‍⚕️ Dashboard</a>
+</div>
+
+<!-- PAGE CONTENT -->
+<main class="container page-content">
+
+  <!-- ===== PRESCRIPTION UPLOAD BANNER ===== -->
+  <div id="rx-banner" class="rx-upload-banner">
+
+    <!-- Header row -->
+    <div class="rx-banner-header">
+      <div class="rx-banner-title">
+        <span class="rx-banner-icon-bg">📋</span>
+        <div>
+          <div style="font-weight:700;font-size:1rem;color:var(--text-primary)">Have a doctor's prescription?</div>
+          <div style="font-size:0.8rem;color:var(--text-muted);margin-top:1px">Upload it here — our pharmacist will verify and add medicines to your order.</div>
+        </div>
+      </div>
+      <button class="rx-banner-dismiss" onclick="dismissRxBanner()" aria-label="Dismiss prescription banner" title="Dismiss">✕</button>
+    </div>
+
+    <!-- Upload zone + actions -->
+    <div class="rx-banner-body">
+
+      <!-- Drag-drop zone -->
+      <div class="rx-mini-dropzone" id="cart-dropzone"
+           role="button" tabindex="0" aria-label="Upload prescription"
+           onclick="document.getElementById('cart-rx-file').click()"
+           ondragover="event.preventDefault();this.classList.add('drag-over')"
+           ondragleave="this.classList.remove('drag-over')"
+           ondrop="handleCartRxDrop(event)">
+        <span id="cart-dz-icon">📄</span>
+        <div id="cart-dz-text">
+          <span style="font-weight:600;font-size:0.875rem">Drop prescription here</span><br>
+          <span style="font-size:0.75rem;color:var(--text-muted)">or click to browse · JPG, PNG, PDF</span>
+        </div>
+        <!-- Preview (hidden initially) -->
+        <div id="cart-rx-preview" style="display:none;align-items:center;gap:10px;width:100%">
+          <img id="cart-rx-thumb" src="" alt="Rx preview"
+               style="width:48px;height:48px;object-fit:cover;border-radius:8px;border:1px solid var(--border)">
+          <div style="flex:1;min-width:0">
+            <div id="cart-rx-fname" style="font-weight:600;font-size:0.82rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"></div>
+            <div style="font-size:0.72rem;color:#059669;font-weight:600;margin-top:2px">✅ Uploaded · Pharmacist will call within 30 min</div>
+          </div>
+          <button onclick="event.stopPropagation();resetCartRx()" class="rx-reupload-btn" title="Re-upload">↺</button>
+        </div>
+      </div>
+
+      <!-- Hidden inputs -->
+      <input type="file" id="cart-rx-file" accept="image/jpeg,image/png,image/webp,application/pdf"
+             style="display:none" onchange="handleCartRxFile(this.files[0])">
+      <input type="file" id="cart-rx-camera" accept="image/*" capture="environment"
+             style="display:none" onchange="handleCartRxFile(this.files[0])">
+
+      <!-- Action buttons column -->
+      <div class="rx-banner-actions">
+        <button class="btn btn-secondary btn-sm" onclick="document.getElementById('cart-rx-camera').click()" style="gap:6px">
+          📸 Camera
+        </button>
+        <a href="https://wa.me/919876543210?text=Hi%20Kirti%20Pharma%2C%20I%20have%20a%20prescription%20and%20want%20to%20place%20a%20medicine%20order."
+           class="btn btn-whatsapp btn-sm" target="_blank" rel="noopener noreferrer" style="gap:6px">
+          💬 WhatsApp Rx
+        </a>
+        <a href="prescription.html" class="btn btn-ghost btn-sm" style="font-size:0.75rem;color:var(--text-muted)">
+          Full upload page →
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- PAGE HEADER -->
+  <div style="margin-bottom:28px">
+    <h1 style="font-size:1.75rem;margin-bottom:4px">Your Cart 🛒</h1>
+    <p style="color:var(--text-muted);font-size:0.9rem" id="summary-item-count">Loading...</p>
+  </div>
+
+  <!-- CART LAYOUT: 2 columns on desktop -->
+  <div style="display:grid;grid-template-columns:1fr 380px;gap:24px;align-items:flex-start" id="cart-layout">
+
+    <!-- LEFT: CART ITEMS -->
+    <div>
+
+      <!-- Cart Items -->
+      <div class="card" id="cart-section" style="display:none">
+        <div style="padding:16px 16px 0;display:flex;align-items:center;justify-content:space-between">
+          <h3 style="font-size:1rem">Items</h3>
+          <button onclick="if(confirm('Remove all items?')){clearCart();renderCartPage()}" class="btn btn-sm btn-ghost" style="font-size:0.78rem">Clear all</button>
+        </div>
+        <div id="cart-items-container"></div>
+      </div>
+
+      <!-- Empty State -->
+      <div id="cart-empty-state" style="display:none;flex-direction:column;align-items:center;padding:80px 24px;text-align:center">
+        <div style="font-size:5rem;margin-bottom:20px">🛒</div>
+        <h2 style="font-size:1.5rem;margin-bottom:10px">Your cart is empty</h2>
+        <p style="color:var(--text-muted);margin-bottom:28px;max-width:300px">Browse our medicines and add items to get started.</p>
+        <a href="index.html" class="btn btn-primary btn-lg">Browse Medicines</a>
+      </div>
+
+      <!-- Continue shopping -->
+      <div id="continue-shopping" style="margin-top:16px">
+        <a href="index.html" style="display:inline-flex;align-items:center;gap:6px;color:var(--green-primary);font-weight:600;font-size:0.875rem">
+          ← Continue Shopping
+        </a>
+      </div>
+
+    </div>
+
+    <!-- RIGHT: ORDER SUMMARY -->
+    <div>
+      <div class="order-summary-card">
+        <div style="padding:20px 20px 12px">
+          <h3 style="font-size:1rem;font-weight:700">Order Summary</h3>
+        </div>
+
+        <div class="summary-row">
+          <span style="color:var(--text-muted)">Subtotal</span>
+          <span id="summary-subtotal">₹0</span>
+        </div>
+        <div class="summary-row">
+          <span style="color:var(--text-muted)">Delivery</span>
+          <span id="summary-delivery">₹30</span>
+        </div>
+        <div style="padding:4px 20px">
+          <p id="delivery-note" style="font-size:0.78rem;font-weight:500"></p>
+        </div>
+        <div class="summary-divider"></div>
+        <div class="summary-row total-row">
+          <span>Total</span>
+          <span id="summary-total">₹0</span>
+        </div>
+
+        <!-- Min order warning -->
+        <div style="padding:0 16px 12px">
+          <div class="min-order-warning" id="min-order-warning" style="display:none">
+            <span>⚠️</span>
+            <span>Add more to checkout (Min ₹299)</span>
+          </div>
+        </div>
+
+        <!-- Delivery address -->
+        <div style="padding:0 16px 16px;border-top:1px solid var(--border);padding-top:16px">
+          <div style="font-size:0.82rem;font-weight:700;margin-bottom:12px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.04em">Deliver to</div>
+
+          <div class="address-card selected" id="addr-0">
+            <input type="radio" name="address" checked id="radio-addr-0">
+            <div class="address-card-info">
+              <div class="address-card-label">🏠 Home</div>
+              <div class="address-card-text">12, Gandhi Nagar, Near Bus Stand, Gondia, MH 441614</div>
+            </div>
+            <span class="address-edit">Edit</span>
+          </div>
+
+          <div class="address-card" id="addr-1">
+            <input type="radio" name="address" id="radio-addr-1">
+            <div class="address-card-info">
+              <div class="address-card-label">🏢 Office</div>
+              <div class="address-card-text">Plot 7, Sadar Area, MIDC Road, Gondia, MH 441614</div>
+            </div>
+            <span class="address-edit">Edit</span>
+          </div>
+
+          <button class="btn btn-ghost btn-sm w-full" style="margin-top:4px">+ Add new address</button>
+        </div>
+
+        <!-- Payment method -->
+        <div style="padding:16px;border-top:1px solid var(--border)">
+          <div style="font-size:0.82rem;font-weight:700;margin-bottom:12px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.04em">Pay via UPI</div>
+          <div class="payment-tiles" id="payment-tiles">
+            <!-- Rendered by cart.js -->
+          </div>
+          <div class="payment-tile" id="pay-cod"
+               onclick="selectPayment('cod')"
+               role="radio"
+               aria-checked="false"
+               tabindex="0"
+               style="margin-top:10px;justify-content:space-between">
+            <div style="display:flex;align-items:center;gap:10px">
+              <span class="payment-tile-icon">💵</span>
+              <span class="payment-tile-name">Cash on Delivery</span>
+            </div>
+            <span style="font-size:0.72rem;color:var(--text-muted)">Pay at your doorstep</span>
+          </div>
+        </div>
+
+        <!-- Checkout Button -->
+        <div style="padding:16px;border-top:1px solid var(--border)">
+          <button class="btn btn-primary btn-full btn-lg" id="checkout-btn" disabled>
+            🔒 Proceed to Pay
+          </button>
+          <p style="font-size:0.75rem;text-align:center;color:var(--text-light);margin-top:10px">
+            Secure payment · Genuine medicines guaranteed
+          </p>
+        </div>
+
+      </div>
+
+      <!-- Trust badges -->
+      <div class="card" style="margin-top:16px;padding:16px">
+        <div style="display:flex;gap:16px;justify-content:space-around;flex-wrap:wrap">
+          <div style="text-align:center">
+            <div style="font-size:1.5rem;margin-bottom:4px">🔒</div>
+            <div style="font-size:0.72rem;font-weight:600;color:var(--text-muted)">Secure Payment</div>
+          </div>
+          <div style="text-align:center">
+            <div style="font-size:1.5rem;margin-bottom:4px">💊</div>
+            <div style="font-size:0.72rem;font-weight:600;color:var(--text-muted)">Genuine Medicines</div>
+          </div>
+          <div style="text-align:center">
+            <div style="font-size:1.5rem;margin-bottom:4px">🚴</div>
+            <div style="font-size:0.72rem;font-weight:600;color:var(--text-muted)">Same-Day Delivery</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- BOTTOM TAB BAR -->
+<nav class="bottom-tab-bar" aria-label="Mobile navigation">
+  <div class="tab-bar-inner">
+    <a href="index.html" class="tab-item">
+      <span class="tab-icon">🏠</span>
+      <span>Home</span>
+    </a>
+    <a href="cart.html" class="tab-item active">
+      <span class="tab-icon" style="position:relative">
+        🛒
+        <span class="tab-cart-badge" style="display:none">0</span>
+      </span>
+      <span>Cart</span>
+    </a>
+    <a href="prescription.html" class="tab-item">
+      <span class="tab-icon">📋</span>
+      <span>Rx</span>
+    </a>
+    <a href="track.html" class="tab-item">
+      <span class="tab-icon">📦</span>
+      <span>Track</span>
+    </a>
+    <a href="dashboard.html" class="tab-item">
+      <span class="tab-icon">🧑‍⚕️</span>
+      <span>Staff</span>
+    </a>
+  </div>
+</nav>
+
+<!-- WHATSAPP FAB -->
+<a href="https://wa.me/919876543210?text=Hi%20Kirti%20Pharma%2C%20I%20want%20to%20place%20a%20medicine%20order."
+   class="whatsapp-fab" target="_blank" rel="noopener noreferrer" aria-label="Order on WhatsApp">
+  <span class="whatsapp-fab-icon">💬</span>
+  <span class="whatsapp-fab-text">Order on WhatsApp</span>
+</a>
+
+<!-- PINCODE MODAL -->
+<div class="modal-overlay" id="pincode-modal" role="dialog" aria-modal="true" aria-labelledby="pincode-title">
+  <div class="modal-box" style="max-width:400px">
+    <div class="modal-header">
+      <h3 class="modal-title" id="pincode-title">Select Delivery Location</h3>
+      <button class="modal-close" onclick="closePincodeModal()" aria-label="Close modal">✕</button>
+    </div>
+    <div class="modal-body" style="padding:24px">
+      <p style="font-size:0.875rem;color:var(--text-muted);margin-bottom:16px">Enter your 6-digit pin code to check delivery availability in Gondia.</p>
+      <div class="form-group">
+        <input type="text" id="pincode-input" class="form-input" placeholder="Enter Pincode (e.g. 441614)" maxlength="6">
+      </div>
+      <button class="btn btn-primary btn-full btn-lg mt-8" onclick="applyPincode()">Apply Pincode</button>
+    </div>
+  </div>
+</div>
+
+<!-- OTP LOGIN MODAL -->
+<div class="modal-overlay" id="login-modal" role="dialog" aria-modal="true" aria-labelledby="login-title">
+  <div class="modal-box" style="max-width:420px">
+    <div class="modal-header">
+      <h3 class="modal-title" id="login-title">Login / Register</h3>
+      <button class="modal-close" onclick="closeLoginModal()" aria-label="Close modal">✕</button>
+    </div>
+    <div class="modal-body login-modal-body" style="padding:32px 24px">
+      <!-- Screen 1: Mobile Input -->
+      <div id="login-phone-screen">
+        <div class="login-modal-logo">🌿</div>
+        <h4 class="login-modal-title">Welcome to Kirti Pharma</h4>
+        <p class="login-modal-sub">Enter your mobile number to login or register.</p>
+        <div class="form-group" style="position:relative">
+          <span class="login-phone-prefix">+91</span>
+          <input type="tel" id="login-phone-input" class="form-input login-phone-input" placeholder="Enter 10-digit mobile number" maxlength="10">
+        </div>
+        <button class="btn btn-primary btn-full btn-lg mt-16" onclick="sendOTP()">Send OTP</button>
+      </div>
+      
+      <!-- Screen 2: Loading -->
+      <div id="login-loading-screen" style="display:none;padding:24px 0">
+        <div class="spinner" style="border-top-color:var(--green-primary);width:36px;height:36px;border-width:4px;margin-bottom:16px"></div>
+        <h4 class="login-modal-title">Sending OTP...</h4>
+        <p class="login-modal-sub">Generating secure code for verification.</p>
+      </div>
+      
+      <!-- Screen 3: OTP Verification -->
+      <div id="login-otp-screen" style="display:none">
+        <div class="login-modal-logo">🔑</div>
+        <h4 class="login-modal-title">Verify OTP</h4>
+        <p class="login-modal-sub">Enter the 4-digit code sent to <strong id="otp-phone-display"></strong></p>
+        <div class="otp-input-wrap">
+          <input type="text" class="otp-digit" maxlength="1">
+          <input type="text" class="otp-digit" maxlength="1">
+          <input type="text" class="otp-digit" maxlength="1">
+          <input type="text" class="otp-digit" maxlength="1">
+        </div>
+        <button class="btn btn-primary btn-full btn-lg" onclick="verifyOTP()">Verify &amp; Proceed</button>
+        <div class="otp-timer">
+          <span id="otp-timer-text">Resend OTP in 30s</span>
+          <button id="otp-resend-btn" class="otp-resend-link" style="display:none" onclick="resendOTP()">Resend OTP</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="toast-container"></div>
+
+<script src="js/app.js"></script>
+<script src="js/medicines.js"></script>
+<script src="js/search.js"></script>
+<script src="js/cart.js"></script>
+<script>
+// ===== CART RX UPLOAD =====
+(function () {
+  // Restore dismiss state
+  if (sessionStorage.getItem('kp_rx_dismissed') === '1') {
+    const b = document.getElementById('rx-banner');
+    if (b) b.style.display = 'none';
+  }
+
+  window.dismissRxBanner = function () {
+    const banner = document.getElementById('rx-banner');
+    if (!banner) return;
+    banner.classList.add('dismissed');
+    sessionStorage.setItem('kp_rx_dismissed', '1');
+    setTimeout(() => { banner.style.display = 'none'; }, 300);
+  };
+
+  window.handleCartRxFile = function (file) {
+    if (!file) return;
+    const allowed = ['image/jpeg', 'image/png', 'image/webp', 'application/pdf'];
+    if (!allowed.includes(file.type)) {
+      showToast('Please upload a JPG, PNG, or PDF file', 'error');
+      return;
+    }
+    if (file.size > 10 * 1024 * 1024) {
+      showToast('File too large. Maximum 10MB allowed.', 'error');
+      return;
+    }
+
+    // Show preview
+    const preview = document.getElementById('cart-rx-preview');
+    const icon    = document.getElementById('cart-dz-icon');
+    const text    = document.getElementById('cart-dz-text');
+    const fname   = document.getElementById('cart-rx-fname');
+    const thumb   = document.getElementById('cart-rx-thumb');
+    const banner  = document.getElementById('rx-banner');
+
+    fname.textContent = file.name;
+
+    if (file.type.startsWith('image/')) {
+      const reader = new FileReader();
+      reader.onload = e => { thumb.src = e.target.result; thumb.style.display = 'block'; };
+      reader.readAsDataURL(file);
+    } else {
+      thumb.style.display = 'none'; // PDF — no thumb
+    }
+
+    icon.style.display    = 'none';
+    text.style.display    = 'none';
+    preview.style.display = 'flex';
+    banner.classList.add('uploaded');
+
+    showToast('✅ Prescription uploaded! Pharmacist will call you shortly.', 'success');
+  };
+
+  window.handleCartRxDrop = function (e) {
+    e.preventDefault();
+    document.getElementById('cart-dropzone').classList.remove('drag-over');
+    const file = e.dataTransfer.files[0];
+    if (file) window.handleCartRxFile(file);
+  };
+
+  window.resetCartRx = function () {
+    const preview = document.getElementById('cart-rx-preview');
+    const icon    = document.getElementById('cart-dz-icon');
+    const text    = document.getElementById('cart-dz-text');
+    const banner  = document.getElementById('rx-banner');
+
+    preview.style.display = 'none';
+    icon.style.display    = '';
+    text.style.display    = '';
+    banner.classList.remove('uploaded');
+
+    document.getElementById('cart-rx-file').value   = '';
+    document.getElementById('cart-rx-camera').value = '';
+  };
+
+  // Keyboard support for dropzone
+  const dz = document.getElementById('cart-dropzone');
+  if (dz) {
+    dz.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        document.getElementById('cart-rx-file').click();
+      }
+    });
+  }
+}());
+</script>
+
+<style>
+  @media (max-width: 768px) {
+    #cart-layout { grid-template-columns: 1fr !important; }
+    .order-summary-card { position: static !important; }
+  }
+
+  /* ===== PRESCRIPTION UPLOAD BANNER ===== */
+  .rx-upload-banner {
+    background: linear-gradient(135deg, #F0FAF4 0%, #E8F5EE 100%);
+    border: 1.5px solid rgba(26,107,60,0.2);
+    border-radius: 16px;
+    padding: 18px 20px;
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+  }
+
+  .rx-upload-banner::before {
+    content: '';
+    position: absolute;
+    top: -30px;
+    right: -30px;
+    width: 120px;
+    height: 120px;
+    background: rgba(26,107,60,0.06);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  .rx-banner-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+
+  .rx-banner-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .rx-banner-icon-bg {
+    width: 40px;
+    height: 40px;
+    background: var(--green-primary);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+    color: white;
+    box-shadow: 0 2px 8px rgba(26,107,60,0.25);
+  }
+
+  .rx-banner-dismiss {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    background: rgba(0,0,0,0.06);
+    border: none;
+    cursor: pointer;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.15s ease;
+    margin-top: 2px;
+  }
+
+  .rx-banner-dismiss:hover {
+    background: var(--danger-light);
+    color: var(--danger);
+  }
+
+  .rx-banner-body {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  /* Mini drag-drop zone */
+  .rx-mini-dropzone {
+    flex: 1;
+    min-width: 220px;
+    background: white;
+    border: 2px dashed rgba(26,107,60,0.35);
+    border-radius: 12px;
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    min-height: 62px;
+  }
+
+  .rx-mini-dropzone:hover,
+  .rx-mini-dropzone.drag-over {
+    background: #e6f7ec;
+    border-color: var(--green-primary);
+    border-style: solid;
+    transform: scale(1.01);
+  }
+
+  .rx-mini-dropzone #cart-dz-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+  }
+
+  .rx-banner-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    flex-shrink: 0;
+  }
+
+  .rx-reupload-btn {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    background: var(--green-light);
+    color: var(--green-primary);
+    font-size: 1rem;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.15s ease;
+  }
+
+  .rx-reupload-btn:hover {
+    background: var(--green-primary);
+    color: white;
+  }
+
+  /* Collapse animation */
+  .rx-upload-banner.dismissed {
+    max-height: 0;
+    padding: 0;
+    margin-bottom: 0;
+    border-width: 0;
+    opacity: 0;
+    overflow: hidden;
+  }
+
+  /* Uploaded state */
+  .rx-upload-banner.uploaded {
+    border-color: rgba(16,185,129,0.4);
+    background: linear-gradient(135deg, #F0FDF4 0%, #DCFCE7 100%);
+  }
+
+  @media (max-width: 640px) {
+    .rx-banner-body { flex-direction: column; align-items: stretch; }
+    .rx-banner-actions { flex-direction: row; flex-wrap: wrap; }
+    .rx-mini-dropzone { min-width: 0; }
+  }
+</style>
+</body>
+</html>

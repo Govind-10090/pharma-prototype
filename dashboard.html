@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Staff Dashboard — Kirti Pharma</title>
+  <meta name="description" content="Kirti Pharma back-office dashboard for reviewing prescriptions, managing stock, and building bills.">
+  <!-- Prevent indexing for staff pages -->
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/components.css">
+  <style>
+html,
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+}
+
+/* Full-page background */
+body {
+    background-image: url('images/bg.jpeg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: 90% top;
+    background-attachment: fixed;
+}
+
+/* Light overlay */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+  
+    z-index: -1;
+}
+
+/* Make major sections transparent */
+.container,
+.page-content,
+.circular-categories-section {
+    background: transparent;
+}
+
+/* Hero section glass effect */
+.hero-left,
+.promo-carousel {
+    backdrop-filter: blur(8px);
+    background: rgba(255,255,255,0.75);
+    border-radius: 24px;
+    padding: 24px;
+}
+
+/* Category section */
+.circular-categories-section {
+    backdrop-filter: blur(8px);
+    background: rgba(255,255,255,0.70);
+    border-radius: 24px;
+    padding: 24px;
+}
+
+/* Medicine cards */
+.medicine-card {
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(6px);
+}
+</style>
+
+</head>
+<body>
+
+<!-- ACCESS NOTICE -->
+<div class="access-notice" role="alert">
+  <span>⚠️</span>
+  <strong>Staff access only</strong> — This dashboard is not visible to customers. Ensure you are logged in as a staff member.
+</div>
+
+<!-- TOP UTILITY BAR -->
+<div class="top-bar">
+  <div class="top-bar-inner container">
+    <span>🏬 Gondia's Trusted Retail Chemist Since 2010</span>
+    <span class="top-bar-right">
+      <span>📞 Call Us: +91 98765 43210</span>
+      <span style="opacity: 0.4;">|</span>
+      <span>🚴 Same-Day Delivery</span>
+    </span>
+  </div>
+</div>
+
+<!-- NAVBAR -->
+<nav class="navbar" role="navigation" aria-label="Main navigation">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo" aria-label="Kirti Pharma Home">
+      <img src="images/kirti-logo.png" alt="Kirti Pharma" class="nav-logo-img">
+    </a>
+    
+    <!-- Deliver-to Pincode -->
+    <div class="nav-location-select" onclick="openPincodeModal()" aria-label="Select delivery location" title="Change pincode">
+      <span class="nav-location-label">Deliver to</span>
+      <span class="nav-location-val" id="nav-pincode-display">📍 Gondia - 441614 ▾</span>
+    </div>
+
+    <!-- Centered Search Autocomplete -->
+    <div class="nav-search-container">
+      <span class="nav-search-icon">🔍</span>
+      <input
+        type="search"
+        id="search-input"
+        class="nav-search-bar"
+        placeholder="Search by medicine name, salt or brand..."
+        autocomplete="off"
+        aria-label="Search medicines"
+      >
+      <button class="nav-mic-btn" id="mic-btn" aria-label="Voice search" title="Search by voice">🎤</button>
+      
+      <!-- Suggestions Dropdown -->
+      <div class="search-autocomplete-dropdown" id="search-suggest-dropdown"></div>
+    </div>
+
+    <div class="nav-right">
+      <a href="prescription.html" class="btn-nav-upload">📋 Upload Rx</a>
+      
+      <!-- Cart Icon -->
+      <a href="cart.html" class="nav-cart-btn" aria-label="View cart" id="nav-cart-link">
+        🛒
+        <span class="cart-badge" style="display:none">0</span>
+      </a>
+      
+      <!-- Login / Account Dropdown -->
+      <a href="#" class="btn-login" id="nav-login-btn" onclick="openLoginModal(event)">Login</a>
+      <div class="nav-user-dropdown" id="nav-user-dropdown" style="display:none">
+        <button class="nav-user-btn" id="nav-user-name" onclick="toggleUserDropdown(event)">👤 Account</button>
+        <div class="dropdown-menu" id="nav-user-menu">
+          <a href="dashboard.html" class="dropdown-item">🧑‍⚕️ Chemist Dashboard</a>
+          <a href="track.html" class="dropdown-item">📦 Track Orders</a>
+          <div style="border-top:1px solid var(--border);margin:4px 0"></div>
+          <button class="dropdown-item" onclick="logoutUser()">Logout</button>
+        </div>
+      </div>
+    </div>
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<div class="mobile-nav-drawer" id="mobile-drawer">
+  <a href="index.html">🏠 Home</a>
+  <a href="index.html#medicine-section">💊 Medicines</a>
+  <a href="prescription.html">📋 Upload Prescription</a>
+  <a href="track.html">📦 Track Order</a>
+  <div class="mobile-nav-divider"></div>
+  <a href="cart.html">🛒 Cart</a>
+  <a href="dashboard.html" class="active">🧑‍⚕️ Dashboard</a>
+</div>
+
+<!-- PAGE HEADER -->
+<div style="background:white;border-bottom:1px solid var(--border);padding:20px 0">
+  <div class="container">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+      <div>
+        <h1 style="font-size:1.5rem;margin-bottom:4px">Chemist Dashboard 🧑‍⚕️</h1>
+        <p style="color:var(--text-muted);font-size:0.875rem">
+          <span id="current-time"></span> · Gondia store
+        </p>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <div class="card" style="padding:12px 20px;text-align:center;min-width:90px">
+          <div style="font-size:1.5rem;font-weight:800;color:var(--green-primary)" id="pending-count">3</div>
+          <div style="font-size:0.72rem;color:var(--text-muted);font-weight:600">PENDING Rx</div>
+        </div>
+        <div class="card" style="padding:12px 20px;text-align:center;min-width:90px">
+          <div style="font-size:1.5rem;font-weight:800;color:#3B82F6">5</div>
+          <div style="font-size:0.72rem;color:var(--text-muted);font-weight:600">OUT TODAY</div>
+        </div>
+        <div class="card" style="padding:12px 20px;text-align:center;min-width:90px">
+          <div style="font-size:1.5rem;font-weight:800;color:#F59E0B">₹4,280</div>
+          <div style="font-size:0.72rem;color:var(--text-muted);font-weight:600">TODAY'S REVENUE</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<main class="container page-content">
+
+  <!-- MOBILE TABS -->
+  <div class="dashboard-tabs" role="tablist">
+    <button class="dash-tab active" data-tab="prescriptions" role="tab" aria-selected="true">📋 Prescriptions (3)</button>
+    <button class="dash-tab" data-tab="medicines" role="tab" aria-selected="false">💊 Medicines</button>
+  </div>
+
+  <!-- DASHBOARD GRID -->
+  <div class="dashboard-grid">
+
+    <!-- LEFT PANEL: PRESCRIPTIONS -->
+    <div id="dash-left-panel">
+
+      <!-- Pending -->
+      <div class="info-card" style="margin-bottom:20px">
+        <div class="info-card-header">
+          📋 Prescriptions
+          <span class="badge badge-saffron" style="font-size:0.7rem" id="pending-badge">3 pending</span>
+        </div>
+        <div id="prescription-list">
+          <!-- Rendered by dashboard.js -->
+        </div>
+      </div>
+
+      <!-- Completed -->
+      <div class="info-card">
+        <div class="info-card-header" style="color:var(--green-primary)">
+          ✅ Completed Today
+        </div>
+        <div id="completed-list">
+          <p style="font-size:0.85rem;color:var(--text-light);padding:12px 0">No completed prescriptions yet.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT PANEL: MEDICINE TABLE + BILL BUILDER -->
+    <div id="dash-right-panel">
+
+      <!-- MEDICINE LOOKUP -->
+      <div class="info-card" style="margin-bottom:20px" id="medicine-table-section">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:16px">
+          <div style="display:flex;align-items:center;gap:10px">
+            <div class="info-card-header" style="margin-bottom:0">💊 Medicine Inventory</div>
+            <span id="table-count" style="font-size:0.8rem;color:var(--text-muted);font-weight:500"></span>
+          </div>
+          <button onclick="openAddMedicineModal()" class="btn btn-primary btn-sm" style="font-size:0.78rem;padding:8px 14px;font-weight:700;display:inline-flex;align-items:center;gap:4px">
+            ➕ Add Medicine
+          </button>
+        </div>
+
+        <!-- Search -->
+        <div style="margin-bottom:14px;position:relative">
+          <span style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--text-light)">🔍</span>
+          <input
+            type="search"
+            id="dash-search"
+            class="form-input"
+            style="padding-left:38px"
+            placeholder="Search medicine, salt, brand..."
+            aria-label="Search medicines in dashboard"
+          >
+        </div>
+
+        <!-- Table -->
+        <div style="overflow-x:auto;border-radius:10px;border:1px solid var(--border)">
+          <table class="medicine-table" role="table" aria-label="Medicine catalogue">
+            <thead>
+              <tr>
+                <th>Medicine</th>
+                <th>Salt</th>
+                <th>Brand</th>
+                <th>Stock</th>
+                <th>Pack</th>
+                <th>Price</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="medicine-table-body">
+              <!-- Rendered by dashboard.js -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination -->
+        <div style="margin-top:16px;display:flex;justify-content:center">
+          <div class="pagination" id="table-pagination"></div>
+        </div>
+      </div>
+
+      <!-- BILL BUILDER -->
+      <div class="info-card" id="bill-builder-section" style="display:none">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:16px">
+          <div>
+            <div class="info-card-header" style="margin-bottom:2px">🧾 Bill Builder</div>
+            <div style="font-size:0.82rem;color:var(--text-muted)">For: <strong id="bill-patient-name">—</strong></div>
+          </div>
+          <button onclick="addBillRow()" class="btn btn-secondary btn-sm">+ Add Row</button>
+        </div>
+
+        <!-- Bill table -->
+        <div style="overflow-x:auto;border-radius:10px;border:1px solid var(--border);margin-bottom:16px">
+          <table class="bill-builder-table" role="table" aria-label="Bill builder">
+            <thead>
+              <tr>
+                <th>Medicine</th>
+                <th>Qty</th>
+                <th>Unit Price</th>
+                <th>Total</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="bill-table-body">
+              <tr>
+                <td colspan="5" style="text-align:center;padding:24px;color:var(--text-muted);font-size:0.875rem">
+                  Use "+ Bill" on any medicine above to add it here.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Grand Total -->
+        <div style="display:flex;justify-content:flex-end;margin-bottom:16px">
+          <div style="background:var(--green-light);border-radius:10px;padding:12px 24px;text-align:right">
+            <div style="font-size:0.78rem;color:var(--text-muted);font-weight:600;margin-bottom:2px">GRAND TOTAL</div>
+            <div style="font-size:1.5rem;font-weight:800;color:var(--green-primary)" id="bill-grand-total">₹0</div>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <button onclick="printInvoice()" class="btn btn-secondary" style="flex:1">
+            🖨️ Print Invoice
+          </button>
+          <button onclick="markAsReady()" class="btn btn-primary" style="flex:1">
+            ✅ Mark as Ready
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<!-- BOTTOM TAB BAR -->
+<nav class="bottom-tab-bar" aria-label="Mobile navigation">
+  <div class="tab-bar-inner">
+    <a href="index.html" class="tab-item">
+      <span class="tab-icon">🏠</span>
+      <span>Home</span>
+    </a>
+    <a href="cart.html" class="tab-item">
+      <span class="tab-icon" style="position:relative">
+        🛒
+        <span class="tab-cart-badge" style="display:none">0</span>
+      </span>
+      <span>Cart</span>
+    </a>
+    <a href="prescription.html" class="tab-item">
+      <span class="tab-icon">📋</span>
+      <span>Rx</span>
+    </a>
+    <a href="track.html" class="tab-item">
+      <span class="tab-icon">📦</span>
+      <span>Track</span>
+    </a>
+    <a href="dashboard.html" class="tab-item active">
+      <span class="tab-icon">🧑‍⚕️</span>
+      <span>Staff</span>
+    </a>
+  </div>
+</nav>
+
+<!-- WHATSAPP FAB -->
+<a href="https://wa.me/919876543210?text=Hi%20Kirti%20Pharma%2C%20I%20want%20to%20place%20a%20medicine%20order."
+   class="whatsapp-fab" target="_blank" rel="noopener noreferrer" aria-label="Order on WhatsApp">
+  <span class="whatsapp-fab-icon">💬</span>
+  <span class="whatsapp-fab-text">Order on WhatsApp</span>
+</a>
+
+<!-- PINCODE MODAL -->
+<div class="modal-overlay" id="pincode-modal" role="dialog" aria-modal="true" aria-labelledby="pincode-title">
+  <div class="modal-box" style="max-width:400px">
+    <div class="modal-header">
+      <h3 class="modal-title" id="pincode-title">Select Delivery Location</h3>
+      <button class="modal-close" onclick="closePincodeModal()" aria-label="Close modal">✕</button>
+    </div>
+    <div class="modal-body" style="padding:24px">
+      <p style="font-size:0.875rem;color:var(--text-muted);margin-bottom:16px">Enter your 6-digit pin code to check delivery availability in Gondia.</p>
+      <div class="form-group">
+        <input type="text" id="pincode-input" class="form-input" placeholder="Enter Pincode (e.g. 441614)" maxlength="6">
+      </div>
+      <button class="btn btn-primary btn-full btn-lg mt-8" onclick="applyPincode()">Apply Pincode</button>
+    </div>
+  </div>
+</div>
+
+<!-- OTP LOGIN MODAL -->
+<div class="modal-overlay" id="login-modal" role="dialog" aria-modal="true" aria-labelledby="login-title">
+  <div class="modal-box" style="max-width:420px">
+    <div class="modal-header">
+      <h3 class="modal-title" id="login-title">Login / Register</h3>
+      <button class="modal-close" onclick="closeLoginModal()" aria-label="Close modal">✕</button>
+    </div>
+    <div class="modal-body login-modal-body" style="padding:32px 24px">
+      <!-- Screen 1: Mobile Input -->
+      <div id="login-phone-screen">
+        <div class="login-modal-logo">🌿</div>
+        <h4 class="login-modal-title">Welcome to Kirti Pharma</h4>
+        <p class="login-modal-sub">Enter your mobile number to login or register.</p>
+        <div class="form-group" style="position:relative">
+          <span class="login-phone-prefix">+91</span>
+          <input type="tel" id="login-phone-input" class="form-input login-phone-input" placeholder="Enter 10-digit mobile number" maxlength="10">
+        </div>
+        <button class="btn btn-primary btn-full btn-lg mt-16" onclick="sendOTP()">Send OTP</button>
+      </div>
+      
+      <!-- Screen 2: Loading -->
+      <div id="login-loading-screen" style="display:none;padding:24px 0">
+        <div class="spinner" style="border-top-color:var(--green-primary);width:36px;height:36px;border-width:4px;margin-bottom:16px"></div>
+        <h4 class="login-modal-title">Sending OTP...</h4>
+        <p class="login-modal-sub">Generating secure code for verification.</p>
+      </div>
+      
+      <!-- Screen 3: OTP Verification -->
+      <div id="login-otp-screen" style="display:none">
+        <div class="login-modal-logo">🔑</div>
+        <h4 class="login-modal-title">Verify OTP</h4>
+        <p class="login-modal-sub">Enter the 4-digit code sent to <strong id="otp-phone-display"></strong></p>
+        <div class="otp-input-wrap">
+          <input type="text" class="otp-digit" maxlength="1">
+          <input type="text" class="otp-digit" maxlength="1">
+          <input type="text" class="otp-digit" maxlength="1">
+          <input type="text" class="otp-digit" maxlength="1">
+        </div>
+        <button class="btn btn-primary btn-full btn-lg" onclick="verifyOTP()">Verify &amp; Proceed</button>
+        <div class="otp-timer">
+          <span id="otp-timer-text">Resend OTP in 30s</span>
+          <button id="otp-resend-btn" class="otp-resend-link" style="display:none" onclick="resendOTP()">Resend OTP</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ADD MEDICINE MODAL -->
+<div class="modal-overlay" id="add-med-modal" role="dialog" aria-modal="true" aria-labelledby="add-med-title">
+  <div class="modal-box" style="max-width:540px">
+    <div class="modal-header">
+      <h3 class="modal-title" id="add-med-title">Add New Medicine to Inventory</h3>
+      <button class="modal-close" onclick="closeModal('add-med-modal')" aria-label="Close modal">✕</button>
+    </div>
+    <div class="modal-body" style="padding:24px">
+      <form id="add-med-form" onsubmit="saveNewMedicine(event)">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+          <div class="form-group">
+            <label class="form-label" style="font-weight:600;font-size:0.82rem;margin-bottom:6px;display:block">Medicine Name *</label>
+            <input type="text" id="add-med-name" class="form-input" placeholder="e.g. Crocin 650mg" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" style="font-weight:600;font-size:0.82rem;margin-bottom:6px;display:block">Active Salt Composition *</label>
+            <input type="text" id="add-med-salt" class="form-input" placeholder="e.g. Paracetamol 650mg" required>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+          <div class="form-group">
+            <label class="form-label" style="font-weight:600;font-size:0.82rem;margin-bottom:6px;display:block">Brand/Manufacturer *</label>
+            <input type="text" id="add-med-brand" class="form-input" placeholder="e.g. GSK" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" style="font-weight:600;font-size:0.82rem;margin-bottom:6px;display:block">Category *</label>
+            <select id="add-med-category" class="form-input" style="height:38px;padding:0 12px;border:1.5px solid var(--border);border-radius:8px" required>
+              <option value="Fever & Pain">Fever & Pain</option>
+              <option value="Antibiotics">Antibiotics</option>
+              <option value="Gastro">Gastro Care</option>
+              <option value="Chronic Care">Chronic Care</option>
+              <option value="Vitamins & Supplements">Vitamins & Supplements</option>
+              <option value="Skincare">Skincare</option>
+              <option value="Baby Care">Baby Care</option>
+              <option value="ENT">ENT Care</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:16px">
+          <div class="form-group">
+            <label class="form-label" style="font-weight:600;font-size:0.82rem;margin-bottom:6px;display:block">Price (₹) *</label>
+            <input type="number" id="add-med-price" class="form-input" min="1" placeholder="e.g. 32" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" style="font-weight:600;font-size:0.82rem;margin-bottom:6px;display:block">MRP (₹) *</label>
+            <input type="number" id="add-med-mrp" class="form-input" min="1" placeholder="e.g. 38" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" style="font-weight:600;font-size:0.82rem;margin-bottom:6px;display:block">Stock Count *</label>
+            <input type="number" id="add-med-stock" class="form-input" min="0" placeholder="e.g. 50" required>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+          <div class="form-group">
+            <label class="form-label" style="font-weight:600;font-size:0.82rem;margin-bottom:6px;display:block">Pack Size *</label>
+            <input type="number" id="add-med-pack-size" class="form-input" min="1" placeholder="e.g. 15" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" style="font-weight:600;font-size:0.82rem;margin-bottom:6px;display:block">Pack Unit *</label>
+            <select id="add-med-pack-unit" class="form-input" style="height:38px;padding:0 12px;border:1.5px solid var(--border);border-radius:8px" required>
+              <option value="tablets">tablets</option>
+              <option value="capsules">capsules</option>
+              <option value="ml">ml (liquid)</option>
+              <option value="gm">gm (ointment/gel)</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:24px;margin-bottom:16px">
+          <label style="display:flex;align-items:center;gap:8px;font-size:0.875rem;cursor:pointer">
+            <input type="checkbox" id="add-med-rx" style="width:16px;height:16px"> Prescription Required (Rx)
+          </label>
+          <label style="display:flex;align-items:center;gap:8px;font-size:0.875rem;cursor:pointer">
+            <input type="checkbox" id="add-med-chronic" style="width:16px;height:16px"> Chronic Care Medication (♻️)
+          </label>
+        </div>
+
+        <!-- Medicine Image Upload Zone (Required as per prompt) -->
+        <div class="form-group" style="margin-bottom:24px">
+          <label class="form-label" style="font-weight:600;font-size:0.82rem;margin-bottom:6px;display:block">Medicine Image *</label>
+          <div class="rx-mini-dropzone" id="med-img-dropzone"
+               role="button" tabindex="0" aria-label="Upload medicine image"
+               onclick="document.getElementById('add-med-file').click()"
+               style="border:2px dashed var(--border);border-radius:12px;padding:20px;text-align:center;cursor:pointer;background:#fafafa">
+            <input type="file" id="add-med-file" accept="image/*" style="display:none" onchange="previewMedImage(event)">
+            <div id="med-dz-content">
+              <span style="font-size:1.5rem">📷</span>
+              <div style="font-weight:600;font-size:0.82rem;margin-top:6px">Click to upload medicine photo</div>
+              <div style="font-size:0.7rem;color:var(--text-light)">JPG, PNG up to 2MB</div>
+            </div>
+            <!-- Preview -->
+            <div id="med-img-preview" style="display:none;align-items:center;justify-content:center;gap:12px;text-align:left">
+              <img id="med-preview-thumb" src="" alt="Medicine Preview" style="width:64px;height:64px;object-fit:cover;border-radius:8px;border:1px solid var(--border)">
+              <div style="flex:1;min-width:0">
+                <div id="med-preview-name" style="font-weight:600;font-size:0.82rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Selected Image</div>
+                <div style="font-size:0.7rem;color:#059669;font-weight:600;margin-top:2px">Ready to save</div>
+              </div>
+              <button type="button" onclick="event.stopPropagation();resetMedImage()" class="rx-reupload-btn" style="border:1px solid var(--border);background:white;padding:4px;border-radius:6px;cursor:pointer">✕</button>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:12px;justify-content:flex-end">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('add-med-modal')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Medicine</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div id="toast-container"></div>
+
+<script src="js/app.js"></script>
+<script src="js/medicines.js"></script>
+<script src="js/search.js"></script>
+<script src="js/dashboard.js"></script>
+
+<script>
+  // Live clock
+  function updateTime() {
+    const now = new Date();
+    const t = now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true });
+    const d = now.toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long' });
+    const el = document.getElementById('current-time');
+    if (el) el.textContent = `${d} · ${t}`;
+  }
+  updateTime();
+  setInterval(updateTime, 30000);
+</script>
+
+<!-- Print styles -->
+<style>
+@media print {
+  .navbar, .bottom-tab-bar, .whatsapp-fab, .access-notice,
+  #toast-container, .btn, #dash-search { display: none !important; }
+  body { background: white; }
+  .container { max-width: 100%; padding: 0; }
+  #bill-builder-section { display: block !important; }
+  .dashboard-grid { grid-template-columns: 1fr !important; }
+  #dash-left-panel { display: none !important; }
+}
+</style>
+</body>
+</html>
