@@ -715,20 +715,55 @@ p { line-height: 1.65; }
 }
 
 @media (max-width: 768px) {
+  /* Nav */
   .nav-links { display: none; }
   .nav-location { display: none; }
   .hamburger { display: flex; }
+
+  /* Nav search — full width */
+  .nav-search-container {
+    flex: 1;
+    max-width: 100%;
+    margin: 0 6px;
+  }
+
+  /* Bottom tab bar */
   .bottom-tab-bar { display: flex; }
+
+  /* WhatsApp FAB above tab bar */
   .whatsapp-fab-text { display: none; }
-  .whatsapp-fab { padding: 14px; border-radius: 50%; bottom: 80px; }
+  .whatsapp-fab {
+    padding: 14px;
+    border-radius: 50%;
+    bottom: 80px;
+    right: 16px;
+  }
+
+  /* Extra bottom padding for tab bar */
   .page-content { padding-bottom: 80px; }
+
+  /* Footer */
   .footer-grid { grid-template-columns: 1fr; gap: 24px; }
   .footer-bottom { flex-direction: column; text-align: center; }
+
+  /* Container padding */
   .container { padding: 0 16px; }
+
+  /* Hide top utility bar on mobile */
+  .top-bar { display: none; }
+
+  /* Nav height for mobile */
+  :root { --nav-height: 60px; }
+}
+
+@media (max-width: 480px) {
+  .nav-inner { padding: 0 12px; gap: 8px; }
+  .nav-search-bar { font-size: 0.8rem; height: 40px; }
+  .container { padding: 0 12px; }
 }
 
 @media (max-width: 375px) {
-  .nav-inner { padding: 0 16px; }
+  .nav-inner { padding: 0 10px; }
   .btn-login { font-size: 0.8rem; padding: 7px 14px; }
 }
 
