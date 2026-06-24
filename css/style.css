@@ -714,6 +714,13 @@ p { line-height: 1.65; }
   .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
 }
 
+/* Tablet-friendly nav adjustments */
+@media (max-width: 900px) {
+  .nav-location-select { display: none; }
+  .hamburger { display: flex; }
+  .btn-nav-upload { display: none; }
+}
+
 @media (max-width: 768px) {
   /* Nav */
   .nav-links { display: none; }

@@ -164,7 +164,7 @@ body::before {
           <span id="current-time"></span> · Gondia store
         </p>
       </div>
-      <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <div class="dash-stat-cards">
         <div class="card" style="padding:12px 20px;text-align:center;min-width:90px">
           <div style="font-size:1.5rem;font-weight:800;color:var(--green-primary)" id="pending-count">3</div>
           <div style="font-size:0.72rem;color:var(--text-muted);font-weight:600">PENDING Rx</div>
@@ -439,7 +439,7 @@ body::before {
     </div>
     <div class="modal-body" style="padding:24px">
       <form id="add-med-form" onsubmit="saveNewMedicine(event)">
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+        <div class="dash-form-grid-2">
           <div class="form-group">
             <label class="form-label" style="font-weight:600;font-size:0.82rem;margin-bottom:6px;display:block">Medicine Name *</label>
             <input type="text" id="add-med-name" class="form-input" placeholder="e.g. Crocin 650mg" required>
@@ -450,7 +450,7 @@ body::before {
           </div>
         </div>
 
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+        <div class="dash-form-grid-2">
           <div class="form-group">
             <label class="form-label" style="font-weight:600;font-size:0.82rem;margin-bottom:6px;display:block">Brand/Manufacturer *</label>
             <input type="text" id="add-med-brand" class="form-input" placeholder="e.g. GSK" required>
@@ -470,7 +470,7 @@ body::before {
           </div>
         </div>
 
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:16px">
+        <div class="dash-form-grid-3">
           <div class="form-group">
             <label class="form-label" style="font-weight:600;font-size:0.82rem;margin-bottom:6px;display:block">Price (₹) *</label>
             <input type="number" id="add-med-price" class="form-input" min="1" placeholder="e.g. 32" required>
@@ -485,7 +485,7 @@ body::before {
           </div>
         </div>
 
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+        <div class="dash-form-grid-2">
           <div class="form-group">
             <label class="form-label" style="font-weight:600;font-size:0.82rem;margin-bottom:6px;display:block">Pack Size *</label>
             <input type="number" id="add-med-pack-size" class="form-input" min="1" placeholder="e.g. 15" required>

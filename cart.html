@@ -164,7 +164,7 @@
   </div>
 
   <!-- CART LAYOUT: 2 columns on desktop -->
-  <div style="display:grid;grid-template-columns:1fr 380px;gap:24px;align-items:flex-start" id="cart-layout">
+  <div class="cart-page-layout" id="cart-layout">
 
     <!-- LEFT: CART ITEMS -->
     <div>
@@ -504,7 +504,7 @@
 </script>
 
 <style>
-  @media (max-width: 768px) {
+  @media (max-width: 900px) {
     #cart-layout { grid-template-columns: 1fr !important; }
     .order-summary-card { position: static !important; }
   }
