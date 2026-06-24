@@ -360,6 +360,25 @@ function markAsReady() {
 }
 
 // ===== DASHBOARD TABS (mobile) =====
+function syncDashPanels() {
+  const leftPanel = document.getElementById('dash-left-panel');
+  const rightPanel = document.getElementById('dash-right-panel');
+  if (!leftPanel || !rightPanel) return;
+
+  if (window.innerWidth <= 1024) {
+    if (activeDashTab === 'prescriptions') {
+      leftPanel.style.display = 'block';
+      rightPanel.style.display = 'none';
+    } else {
+      leftPanel.style.display = 'none';
+      rightPanel.style.display = 'block';
+    }
+  } else {
+    leftPanel.style.removeProperty('display');
+    rightPanel.style.removeProperty('display');
+  }
+}
+
 function initDashTabs() {
   const tabs = document.querySelectorAll('.dash-tab');
   tabs.forEach(tab => {
@@ -368,21 +387,15 @@ function initDashTabs() {
       activeDashTab = target;
       tabs.forEach(t => t.classList.remove('active'));
       tab.classList.add('active');
-
-      const leftPanel = document.getElementById('dash-left-panel');
-      const rightPanel = document.getElementById('dash-right-panel');
-
-      if (window.innerWidth <= 1024) {
-        if (target === 'prescriptions') {
-          if (leftPanel) leftPanel.style.display = 'block';
-          if (rightPanel) rightPanel.style.display = 'none';
-        } else {
-          if (leftPanel) leftPanel.style.display = 'none';
-          if (rightPanel) rightPanel.style.display = 'block';
-        }
-      }
+      syncDashPanels();
     });
   });
+
+  // Initial sync on page load
+  syncDashPanels();
+
+  // Keep synced on window resize
+  window.addEventListener('resize', syncDashPanels);
 }
 
 // ===== INVENTORY MANAGEMENT MODAL & ACTION LOGIC =====
