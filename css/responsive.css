@@ -1,0 +1,772 @@
+/* ============================================================
+   KIRTI PHARMA — RESPONSIVE.CSS
+   Comprehensive breakpoints: Desktop → Tablet → Phone
+   NO UI or design changes — layout/spacing adjustments only
+   ============================================================ */
+
+/* ──────────────────────────────────────────────
+   BREAKPOINTS REFERENCE
+   1280px+   : Large desktop (default)
+   1024px    : Small desktop / large tablet (landscape iPad Pro)
+   900px     : Tablet landscape / large tablet portrait
+   768px     : Tablet portrait (Android 10" tablets ~768px)
+   640px     : Large phone / small tablet
+   480px     : Medium phone
+   375px     : Small phone (iPhone SE)
+   320px     : Very small phone
+   ────────────────────────────────────────────── */
+
+
+/* =============================================
+   1024px — Small desktop / Large tablet landscape
+   ============================================= */
+@media (max-width: 1024px) {
+
+  .container {
+    padding: 0 20px;
+  }
+
+  .nav-inner {
+    gap: 14px;
+    padding: 0 20px;
+  }
+
+  .nav-search-container {
+    max-width: 380px;
+  }
+
+  .hero-layout {
+    gap: 24px;
+  }
+
+  t .medicine-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+  }
+
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-tabs {
+    display: flex;
+  }
+
+  .cart-page-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .order-summary-card {
+    position: static !important;
+  }
+}
+
+
+/* =============================================
+   900px — Tablet landscape (Android 10" landscape, iPad)
+   ============================================= */
+@media (max-width: 900px) {
+
+  .nav-location-select {
+    display: none !important;
+  }
+
+  .hamburger {
+    display: flex !important;
+  }
+
+  .btn-nav-upload {
+    display: none !important;
+  }
+
+  .nav-inner {
+    gap: 10px;
+    padding: 0 16px;
+  }
+
+  .hero-layout {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  #hero-layout {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  .hero-left {
+    padding: 20px !important;
+  }
+
+  .promo-carousel {
+    padding: 0 !important;
+    margin-bottom: 0 !important;
+  }
+
+  .circular-categories-grid {
+    gap: 12px;
+  }
+
+  .medicine-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .steps-row-3col {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+
+  .categories-display-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  .cart-page-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .order-summary-card {
+    position: static !important;
+  }
+
+  .rx-two-panel {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+}
+
+
+/* =============================================
+   768px — Tablet portrait (Android 8"/10" portrait)
+   Samsung Galaxy Tab, Lenovo Tab, etc.
+   ============================================= */
+@media (max-width: 768px) {
+
+  :root {
+    --nav-height: 60px;
+  }
+
+  .container {
+    padding: 0 16px;
+  }
+
+  .top-bar {
+    display: none;
+  }
+
+  .nav-links {
+    display: none;
+  }
+
+  .nav-location {
+    display: none;
+  }
+
+  .nav-location-select {
+    display: none !important;
+  }
+
+  .btn-nav-upload {
+    display: none !important;
+  }
+
+  .nav-login-btn-wrap {
+    display: none !important;
+  }
+
+  #nav-login-btn {
+    display: none !important;
+  }
+
+  #nav-user-dropdown {
+    display: none !important;
+  }
+
+  .hamburger {
+    display: flex !important;
+  }
+
+  .nav-search-container {
+    flex: 1;
+    max-width: 100%;
+    margin: 0 6px;
+  }
+
+  .bottom-tab-bar {
+    display: flex;
+  }
+
+  .whatsapp-fab-text {
+    display: none;
+  }
+
+  .whatsapp-fab {
+    padding: 14px;
+    border-radius: 50%;
+    bottom: 80px;
+    right: 16px;
+  }
+
+  .page-content {
+    padding-bottom: 80px;
+  }
+
+  .hero-layout {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .medicine-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  .steps-row {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .step-arrow {
+    transform: rotate(90deg);
+  }
+
+  .steps-row-3col {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .chronic-banner {
+    flex-direction: column;
+    text-align: center;
+    padding: 24px;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .btn {
+    min-height: 44px;
+  }
+
+  .tab-item {
+    min-width: 44px;
+  }
+
+  .qty-btn {
+    width: 36px;
+    height: 36px;
+  }
+
+  .rx-two-panel {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-tabs {
+    display: flex;
+  }
+}
+
+
+/* =============================================
+   640px — Large phone / small tablet (7")
+   Samsung Galaxy Tab A7 Lite, small Android tablets
+   ============================================= */
+@media (max-width: 640px) {
+
+  .nav-search-bar {
+    font-size: 0.85rem;
+  }
+
+  .btn-nav-upload {
+    display: none !important;
+  }
+
+  .promo-carousel {
+    height: 200px;
+  }
+
+  .carousel-slide {
+    padding: 20px 24px;
+  }
+
+  .carousel-slide-content h2 {
+    font-size: 1.35rem;
+  }
+
+  .carousel-slide-content p {
+    font-size: 0.82rem;
+    margin-bottom: 12px;
+  }
+
+  .carousel-btn {
+    display: none;
+  }
+
+  .medicine-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .hero-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .category-circle-item {
+    width: 76px;
+  }
+
+  .category-circle {
+    width: 60px;
+    height: 60px;
+    font-size: 1.5rem;
+  }
+
+  .page-header-stats {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 8px;
+  }
+}
+
+
+/* =============================================
+   520px — Medium-large phone
+   ============================================= */
+@media (max-width: 520px) {
+
+  .dropzone {
+    padding: 32px 20px;
+  }
+
+  .chronic-banner {
+    padding: 20px 16px;
+  }
+
+  .chronic-banner-text p {
+    font-size: 0.82rem;
+  }
+
+  .categories-display-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+    padding: 0 12px 16px;
+  }
+
+  .nav-logo-img {
+    height: 52px;
+  }
+
+  .dash-stat-cards {
+    width: 100%;
+  }
+
+  .dash-stat-cards .card {
+    flex: 1;
+    min-width: 80px;
+    padding: 10px 12px !important;
+  }
+}
+
+
+/* =============================================
+   480px — Medium phone (iPhone 11, Android mid)
+   ============================================= */
+@media (max-width: 480px) {
+
+  .container {
+    padding: 0 12px;
+  }
+
+  .nav-inner {
+    padding: 0 12px;
+    gap: 8px;
+  }
+
+  .nav-search-bar {
+    font-size: 0.8rem;
+    height: 40px;
+  }
+
+  .nav-right .btn-login,
+  .nav-right #nav-login-btn,
+  .nav-right #nav-user-dropdown {
+    display: none !important;
+  }
+
+  .hero-left {
+    padding: 16px !important;
+  }
+
+  .hero-left h1 {
+    font-size: 1.65rem !important;
+  }
+
+  .hero-left p {
+    font-size: 0.875rem;
+  }
+
+  .circular-categories-section {
+    padding: 16px !important;
+  }
+
+  .medicine-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .category-circle-item {
+    width: 72px;
+  }
+
+  .modal-box {
+    border-radius: 12px;
+    max-height: 90vh;
+  }
+
+  .modal-body {
+    padding: 16px !important;
+  }
+
+  .modal-header {
+    padding: 16px !important;
+  }
+
+  .otp-digit {
+    width: 40px;
+    height: 40px;
+    font-size: 1.1rem;
+  }
+
+  .otp-input-wrap {
+    gap: 8px;
+  }
+
+  .cart-item {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .cart-item-total {
+    flex: 1;
+    text-align: left;
+  }
+
+  .suggest-categories {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .steps-row-3col {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .track-progress-labels {
+    font-size: 0.62rem !important;
+    letter-spacing: 0 !important;
+  }
+
+  .prescription-card {
+    padding: 12px;
+    gap: 10px;
+  }
+
+  .dash-form-grid-2 {
+    grid-template-columns: 1fr;
+  }
+
+  .dash-form-grid-3 {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .payment-tiles {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* =============================================
+   375px — Small phone (iPhone SE, Galaxy A)
+   ============================================= */
+@media (max-width: 375px) {
+
+  .nav-inner {
+    padding: 0 10px;
+  }
+
+  .btn-login {
+    font-size: 0.8rem;
+    padding: 7px 14px;
+  }
+
+  .nav-logo-img {
+    height: 46px;
+  }
+
+  .otp-digit {
+    width: 36px;
+    height: 36px;
+    font-size: 1rem;
+  }
+
+  .otp-input-wrap {
+    gap: 6px;
+  }
+}
+
+
+/* =============================================
+   320px — Very small phone (older Android)
+   ============================================= */
+@media (max-width: 320px) {
+
+  .container {
+    padding: 0 8px;
+  }
+
+  .nav-inner {
+    padding: 0 8px;
+    gap: 6px;
+  }
+
+  .nav-logo-img {
+    height: 40px;
+  }
+
+  .medicine-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .hero-left {
+    padding: 12px !important;
+  }
+
+  .hero-left h1 {
+    font-size: 1.4rem !important;
+  }
+
+  .btn-lg {
+    padding: 12px 18px;
+    font-size: 0.9rem;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+
+/* =============================================
+   ANDROID TABLET SPECIFIC BREAKPOINTS
+   ============================================= */
+
+/* Samsung Galaxy Tab A (540–640px) */
+@media (min-width: 540px) and (max-width: 640px) {
+  .medicine-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  .hero-layout {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .steps-row-3col {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .circular-categories-grid {
+    gap: 14px;
+  }
+}
+
+/* Android 8" tablet portrait (641–768px) */
+@media (min-width: 641px) and (max-width: 768px) {
+  .medicine-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .steps-row-3col {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+
+  .hero-layout {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .nav-search-container {
+    max-width: 260px;
+  }
+}
+
+/* Android 10" tablet portrait (769–900px) */
+@media (min-width: 769px) and (max-width: 900px) {
+  .medicine-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+  }
+
+  .hero-layout {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .steps-row-3col {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+
+  .nav-search-container {
+    max-width: 300px;
+    margin: 0 8px;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+}
+
+/* Android tablet landscape (901–1024px) */
+@media (min-width: 901px) and (max-width: 1024px) {
+  .medicine-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+  }
+
+  .hero-layout {
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 24px;
+  }
+
+  .steps-row-3col {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+
+  .nav-search-container {
+    max-width: 360px;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+  }
+}
+
+
+/* =============================================
+   TOUCH DEVICE IMPROVEMENTS
+   ============================================= */
+@media (hover: none) and (pointer: coarse) {
+
+  .btn {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  .tab-item {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  .nav-cart-btn {
+    width: 44px;
+    height: 44px;
+  }
+
+  .qty-btn {
+    width: 40px;
+    height: 40px;
+  }
+
+  .card-stepper-btn {
+    min-width: 44px;
+  }
+
+  .dropdown-item {
+    padding: 14px 16px;
+  }
+
+  .category-circle-item {
+    padding: 4px;
+  }
+
+  /* Disable hover lift on touch */
+  .medicine-card:hover {
+    transform: none;
+  }
+
+  .card:hover {
+    transform: none;
+  }
+}
+
+
+/* =============================================
+   LANDSCAPE PHONE FIX
+   ============================================= */
+@media (max-height: 500px) and (orientation: landscape) {
+
+  .hero-left {
+    padding: 12px !important;
+  }
+
+  .promo-carousel {
+    height: 160px;
+  }
+
+  .bottom-tab-bar {
+    height: 52px;
+  }
+
+  .top-bar {
+    display: none;
+  }
+}
+
+
+/* =============================================
+   UTILITY: Prevent horizontal overflow
+   ============================================= */
+html,
+body {
+  overflow-x: hidden;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+.table-scroll-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+}

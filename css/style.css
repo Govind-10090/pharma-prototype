@@ -734,20 +734,20 @@ p { line-height: 1.65; }
     margin: 0 6px;
   }
 
-  /* Bottom tab bar */
-  .bottom-tab-bar { display: flex; }
+  /* Bottom tab bar — hidden on mobile */
+  .bottom-tab-bar { display: none; }
 
-  /* WhatsApp FAB above tab bar */
+  /* WhatsApp FAB — normal position */
   .whatsapp-fab-text { display: none; }
   .whatsapp-fab {
     padding: 14px;
     border-radius: 50%;
-    bottom: 80px;
+    bottom: 24px;
     right: 16px;
   }
 
-  /* Extra bottom padding for tab bar */
-  .page-content { padding-bottom: 80px; }
+  /* Normal bottom padding */
+  .page-content { padding-bottom: 32px; }
 
   /* Footer */
   .footer-grid { grid-template-columns: 1fr; gap: 24px; }
