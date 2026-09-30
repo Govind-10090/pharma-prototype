@@ -305,6 +305,7 @@ async function query(sql, params = []) {
     const [rows] = await mysqlPool.query(sql, params);
     return rows;
   }
+  if (!sqliteDb) return []; // Supabase-only environment
   return new Promise((resolve, reject) => {
     sqliteDb.all(sql, params, (err, rows) => {
       if (err) reject(err);
@@ -318,6 +319,7 @@ async function get(sql, params = []) {
     const [rows] = await mysqlPool.query(sql, params);
     return rows[0] || null;
   }
+  if (!sqliteDb) return null; // Supabase-only environment
   return new Promise((resolve, reject) => {
     sqliteDb.get(sql, params, (err, row) => {
       if (err) reject(err);
@@ -331,6 +333,7 @@ async function run(sql, params = []) {
     const [result] = await mysqlPool.query(sql, params);
     return { lastID: result.insertId, changes: result.affectedRows };
   }
+  if (!sqliteDb) return { lastID: null, changes: 0 }; // Supabase-only environment
   return new Promise((resolve, reject) => {
     sqliteDb.run(sql, params, function (err) {
       if (err) reject(err);
@@ -341,6 +344,12 @@ async function run(sql, params = []) {
 
 // Initialize tables and seed data automatically on startup
 async function initDatabase() {
+  // Skip local DB setup entirely when running in Supabase-only mode (e.g. Vercel)
+  if (!isMySQL && !sqliteDb) {
+    console.log('[DATABASE] ☁️ Supabase-only mode — skipping local DB initialization.');
+    return;
+  }
+
   if (isMySQL) {
     await run(`
       CREATE TABLE IF NOT EXISTS medicines (
