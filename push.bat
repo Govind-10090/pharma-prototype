@@ -1,5 +1,5 @@
 @echo off
-set "PATH=%USERPROFILE%\MinGit\cmd;%PATH%"
+set "PATH=%USERPROFILE%\MinGit\cmd;%USERPROFILE%\GCM;%PATH%"
 echo ========================================================
 echo  Pushing Kirti Pharma to GitHub
 echo  Repository: https://github.com/Govind-10090/pharma-prototype
