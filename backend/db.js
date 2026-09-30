@@ -283,14 +283,20 @@ if (shouldUseMySQL) {
 }
 
 if (!isMySQL) {
-  const sqlite3 = require('sqlite3').verbose();
-  sqliteDb = new sqlite3.Database(DB_FILE, (err) => {
-    if (err) {
-      console.error('Failed to open SQLite database:', err.message);
-    } else {
-      console.log(`[DATABASE] 📁 Connected to Embedded Database: ${DB_FILE}`);
-    }
-  });
+  try {
+    const sqlite3 = require('sqlite3').verbose();
+    sqliteDb = new sqlite3.Database(DB_FILE, (err) => {
+      if (err) {
+        console.error('Failed to open SQLite database:', err.message);
+      } else {
+        console.log(`[DATABASE] 📁 Connected to Embedded Database: ${DB_FILE}`);
+      }
+    });
+  } catch (err) {
+    // SQLite not available (e.g. Vercel serverless) — Supabase handles all DB operations
+    console.warn('[DATABASE] SQLite unavailable (serverless env). Using Supabase cloud DB only.');
+    sqliteDb = null;
+  }
 }
 
 // Unified Query Wrappers for both MySQL and SQLite
