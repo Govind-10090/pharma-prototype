@@ -75,8 +75,12 @@ CREATE TABLE IF NOT EXISTS public.users (
   email TEXT,
   role TEXT DEFAULT 'customer',
   addresses JSONB,
+  password_hash TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
+
+-- Migration: add password_hash to existing users table (safe to run again)
+ALTER TABLE public.users ADD COLUMN IF NOT EXISTS password_hash TEXT;
 
 -- ENABLE PUBLIC ACCESS POLICIES (Allow App to Read/Write)
 ALTER TABLE public.medicines ENABLE ROW LEVEL SECURITY;

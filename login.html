@@ -230,14 +230,14 @@
         Login / Register
       </h3>
       <p style="margin: 0 0 22px; font-size: 0.85rem; color: #64748b; line-height: 1.4;" id="page-sub">
-        Enter your mobile number to access your account &amp; orders.
+        Enter your mobile number &amp; password to access your account.
       </p>
     </div>
 
-    <!-- Screen 1: Mobile & Name Input -->
+    <!-- Login Form: Mobile + Password -->
     <div id="screen-input">
       <div class="form-group-custom" id="name-input-group">
-        <label for="input-customer-name">Full Name <span style="font-weight:400;color:#94a3b8">(New customers)</span></label>
+        <label for="input-customer-name">Full Name <span style="font-weight:400;color:#94a3b8">(New customers only)</span></label>
         <input type="text" id="input-customer-name" class="custom-name-input" placeholder="e.g. Ramesh Patel">
       </div>
 
@@ -249,41 +249,20 @@
         </div>
       </div>
 
-      <button type="button" class="btn-submit" onclick="doSendOtp()">
-        Send Verification OTP
+      <div class="form-group-custom">
+        <label for="input-customer-password">Password</label>
+        <div class="input-phone-wrap" style="position:relative">
+          <input type="password" id="input-customer-password" class="custom-name-input" placeholder="Enter your password" style="padding-right:44px">
+          <button type="button" onclick="togglePassword()" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#64748b;font-size:18px;line-height:1;" title="Show/Hide password" id="toggle-pw-btn">👁</button>
+        </div>
+      </div>
+
+      <button type="button" class="btn-submit" id="login-btn" onclick="doLogin()">
+        Login / Register
       </button>
 
       <div style="font-size: 12px; color: #94a3b8; margin-top: 14px;">
-        💡 Demo Verification OTP is <strong>1234</strong>
-      </div>
-    </div>
-
-    <!-- Screen 2: OTP Verification Screen -->
-    <div id="screen-otp" style="display:none">
-      <div style="font-size: 2.2rem; margin-bottom: 10px;">🔑</div>
-      <h4 style="margin: 0 0 6px; font-size: 1.15rem; font-weight: 800; color: #0f172a;">Verify Mobile OTP</h4>
-      <p style="font-size: 0.85rem; color: #64748b; margin: 0 0 20px;">
-        Code sent to <strong id="display-otp-phone" style="color:#0f172a"></strong>
-      </p>
-
-      <div class="otp-input-wrap">
-        <input type="text" class="otp-digit page-otp-digit" maxlength="1" inputmode="numeric">
-        <input type="text" class="otp-digit page-otp-digit" maxlength="1" inputmode="numeric">
-        <input type="text" class="otp-digit page-otp-digit" maxlength="1" inputmode="numeric">
-        <input type="text" class="otp-digit page-otp-digit" maxlength="1" inputmode="numeric">
-      </div>
-
-      <button type="button" class="btn-submit" onclick="doVerifyOtp()">
-        Verify &amp; Continue
-      </button>
-
-      <div class="otp-timer" style="margin-top: 14px;">
-        <span id="page-timer-text">Resend in 30s</span>
-        <button id="page-resend-btn" class="otp-resend-link" style="display:none" onclick="doResendOtp()">Resend Code</button>
-      </div>
-
-      <div style="margin-top: 16px;">
-        <a href="#" onclick="goBackToInput(event)" style="font-size:13px;color:#64748b;text-decoration:none">← Change Mobile Number</a>
+        🔒 New customer? Enter a password to create your account.
       </div>
     </div>
 
@@ -304,15 +283,27 @@
 
 <script src="js/app.js"></script>
 <script>
-let currentRole = 'customer';
-let timerInterval = null;
+function togglePassword() {
+  const pw = document.getElementById('input-customer-password');
+  const btn = document.getElementById('toggle-pw-btn');
+  if (pw.type === 'password') {
+    pw.type = 'text';
+    btn.textContent = '🙈';
+  } else {
+    pw.type = 'password';
+    btn.textContent = '👁';
+  }
+}
 
+async function doLogin() {
+  const phoneInput  = document.getElementById('input-customer-phone');
+  const nameInput   = document.getElementById('input-customer-name');
+  const pwInput     = document.getElementById('input-customer-password');
+  const btn         = document.getElementById('login-btn');
 
-
-async function doSendOtp() {
-  const phoneInput = document.getElementById('input-customer-phone');
-  const nameInput = document.getElementById('input-customer-name');
-  const phone = (phoneInput.value || '').replace(/[^0-9]/g, '').trim();
+  const phone    = (phoneInput.value  || '').replace(/[^0-9]/g, '').trim();
+  const name     = (nameInput.value   || '').trim();
+  const password = (pwInput.value     || '').trim();
 
   if (!/^\d{10}$/.test(phone)) {
     showToast('Please enter a valid 10-digit mobile number', 'error');
@@ -320,138 +311,57 @@ async function doSendOtp() {
     return;
   }
 
-  try {
-    // Check if customer exists in Supabase
-    const res = await fetch(`/api/auth/lookup?phone=${phone}`);
-    const data = await res.json();
-    if (data.success && data.exists && data.user) {
-      if (nameInput && !nameInput.value) nameInput.value = data.user.name;
-      if (data.user.role === 'admin') {
-        showToast(`Welcome back, ${data.user.name}! 🧑‍⚕️`, 'info', 3000);
-      } else {
-        showToast(`Welcome back, ${data.user.name}! 🌿`, 'info', 3000);
-      }
-    } else {
-      showToast('New customer registration: Sending code! 🌿', 'info', 3000);
-    }
-
-    await fetch('/api/auth/send-otp', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ phone })
-    });
-  } catch (e) {}
-
-  document.getElementById('screen-input').style.display = 'none';
-  document.getElementById('screen-otp').style.display = 'block';
-  document.getElementById('display-otp-phone').textContent = `+91 ${phone.slice(0,5)} ${phone.slice(5)}`;
-
-  const digits = document.querySelectorAll('.page-otp-digit');
-  digits.forEach(d => d.value = '');
-  if (digits[0]) digits[0].focus();
-
-  startTimer();
-  showToast('ℹ️ Verification Code is 1234', 'info', 5000);
-}
-
-function startTimer() {
-  let sec = 30;
-  const text = document.getElementById('page-timer-text');
-  const btn = document.getElementById('page-resend-btn');
-  text.style.display = 'block';
-  btn.style.display = 'none';
-
-  clearInterval(timerInterval);
-  timerInterval = setInterval(() => {
-    sec--;
-    text.textContent = `Resend in ${sec}s`;
-    if (sec <= 0) {
-      clearInterval(timerInterval);
-      text.style.display = 'none';
-      btn.style.display = 'inline-block';
-    }
-  }, 1000);
-}
-
-function doResendOtp() {
-  showToast('OTP Resent! Demo verification code is 1234', 'success');
-  startTimer();
-}
-
-function goBackToInput(e) {
-  e.preventDefault();
-  document.getElementById('screen-otp').style.display = 'none';
-  document.getElementById('screen-input').style.display = 'block';
-}
-
-async function doVerifyOtp() {
-  let otp = '';
-  document.querySelectorAll('.page-otp-digit').forEach(d => otp += d.value.trim());
-
-  if (otp.length < 4) {
-    showToast('Please enter all 4 digits', 'error');
+  if (password.length < 4) {
+    showToast('Password must be at least 4 characters', 'error');
+    pwInput.focus();
     return;
   }
 
-  const phone = document.getElementById('input-customer-phone').value.replace(/[^0-9]/g, '').trim();
-  const name = document.getElementById('input-customer-name').value.trim();
+  btn.disabled = true;
+  btn.textContent = 'Please wait…';
 
   try {
-    const res = await fetch('/api/auth/verify-otp', {
+    const res  = await fetch('/api/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ phone, otp, name })
+      body: JSON.stringify({ phone, password, name })
     });
     const data = await res.json();
 
     if (!data.success || !data.user) {
-      showToast(data.error || 'Invalid OTP. Use demo code 1234.', 'error');
+      showToast(data.error || 'Login failed. Please check your credentials.', 'error');
+      btn.disabled = false;
+      btn.textContent = 'Login / Register';
       return;
     }
 
     const user = data.user;
-    localStorage.setItem('kp_logged_in', 'true');
-    localStorage.setItem('kp_user_phone', user.phone);
-    localStorage.setItem('kp_user_name', user.name);
-    localStorage.setItem('kp_user_role', user.role);
-    if (data.token) localStorage.setItem('kp_token', data.token);
-    if (user.addresses) localStorage.setItem('kp_user_addresses', JSON.stringify(user.addresses));
+    localStorage.setItem('kp_logged_in',       'true');
+    localStorage.setItem('kp_user_phone',       user.phone);
+    localStorage.setItem('kp_user_name',        user.name);
+    localStorage.setItem('kp_user_role',        user.role);
+    if (data.token)        localStorage.setItem('kp_token',          data.token);
+    if (user.addresses)    localStorage.setItem('kp_user_addresses', JSON.stringify(user.addresses));
 
-    // Role-based routing:
     if (user.role === 'admin') {
-      showToast(`🧑‍⚕️ Chemist verified! Opening Chemist Dashboard...`, 'success', 2000);
-      setTimeout(() => {
-        window.location.href = 'dashboard.html';
-      }, 700);
+      showToast(`🧑‍⚕️ Welcome, ${user.name}! Opening Chemist Dashboard…`, 'success', 2000);
+      setTimeout(() => { window.location.href = 'dashboard.html'; }, 700);
     } else {
-      showToast(`✅ Welcome, ${user.name}! Opening customer store...`, 'success', 2000);
-      setTimeout(() => {
-        window.location.href = 'index.html';
-      }, 700);
+      showToast(`✅ Welcome, ${user.name}! Opening store…`, 'success', 2000);
+      setTimeout(() => { window.location.href = 'index.html'; }, 700);
     }
   } catch (err) {
-    showToast('Failed to verify OTP. Please try again.', 'error');
+    showToast('Connection error. Please try again.', 'error');
+    btn.disabled = false;
+    btn.textContent = 'Login / Register';
   }
 }
 
-// Setup auto-advance for digits
+// Allow Enter key to submit
 document.addEventListener('DOMContentLoaded', () => {
-
-  const digits = document.querySelectorAll('.page-otp-digit');
-  digits.forEach((digit, idx) => {
-    digit.addEventListener('input', () => {
-      digit.value = digit.value.replace(/[^0-9]/g, '');
-      if (digit.value && idx < digits.length - 1) {
-        digits[idx + 1].focus();
-      }
-    });
-    digit.addEventListener('keydown', (e) => {
-      if (e.key === 'Backspace' && !digit.value && idx > 0) {
-        digits[idx - 1].focus();
-      } else if (e.key === 'Enter') {
-        doVerifyOtp();
-      }
-    });
+  ['input-customer-phone', 'input-customer-name', 'input-customer-password'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
   });
 });
 </script>

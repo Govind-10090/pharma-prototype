@@ -170,11 +170,17 @@ CREATE TABLE `users` (
   `email` VARCHAR(100) DEFAULT NULL,
   `role` VARCHAR(20) DEFAULT 'customer',
   `addresses` JSON DEFAULT NULL,
+  `password_hash` VARCHAR(255) DEFAULT NULL,
   `createdAt` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+-- Migration: add password_hash to existing users table (safe to run again)
+ALTER TABLE `users` ADD COLUMN IF NOT EXISTS `password_hash` VARCHAR(255) DEFAULT NULL;
+
 -- ------------------------------------------------------------
 -- Dumping data for table `users` (Demo Accounts)
+-- Note: password_hash is NULL for existing demo users; they will be prompted
+-- to set a password on first login using the new mobile+password auth flow.
 -- ------------------------------------------------------------
 INSERT INTO `users` (`id`, `name`, `phone`, `email`, `role`, `addresses`) VALUES
 ('user-chemist', 'Dr. Kirti Agrawal (Pharmacist)', '9876540000', 'chemist@kirtipharma.com', 'admin', '[{"id":"addr-store","tag":"Store","text":"Kirti Medical Store, Near Bus Stand, Gondia - 441601","isDefault":true}]'),
