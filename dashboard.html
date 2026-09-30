@@ -132,8 +132,8 @@ body::before {
       <div class="nav-user-dropdown" id="nav-user-dropdown" style="display:none">
         <button class="nav-user-btn" id="nav-user-name" onclick="toggleUserDropdown(event)">👤 Account</button>
         <div class="dropdown-menu" id="nav-user-menu">
-          <a href="dashboard.html" class="dropdown-item">🧑‍⚕️ Chemist Dashboard</a>
           <a href="track.html" class="dropdown-item">📦 Track Orders</a>
+          <a href="dashboard.html" class="dropdown-item active">🧑‍⚕️ Chemist Dashboard</a>
           <div style="border-top:1px solid var(--border);margin:4px 0"></div>
           <button class="dropdown-item" onclick="logoutUser()">Logout</button>
         </div>
@@ -152,7 +152,7 @@ body::before {
   <a href="track.html">📦 Track Order</a>
   <div class="mobile-nav-divider"></div>
   <a href="cart.html">🛒 Cart</a>
-  <a href="dashboard.html" class="active">🧑‍⚕️ Dashboard</a>
+  <a href="dashboard.html" class="active">🧑‍⚕️ Chemist Dashboard</a>
 </div>
 
 <!-- PAGE HEADER -->
@@ -166,17 +166,21 @@ body::before {
         </p>
       </div>
       <div class="dash-stat-cards">
-        <div class="card" style="padding:12px 20px;text-align:center;min-width:90px">
-          <div style="font-size:1.5rem;font-weight:800;color:var(--green-primary)" id="pending-count">3</div>
-          <div style="font-size:0.72rem;color:var(--text-muted);font-weight:600">PENDING Rx</div>
+        <div class="card" style="padding:12px 18px;text-align:center;min-width:85px">
+          <div style="font-size:1.4rem;font-weight:800;color:var(--green-primary)" id="pending-count">3</div>
+          <div style="font-size:0.7rem;color:var(--text-muted);font-weight:700">PENDING Rx</div>
         </div>
-        <div class="card" style="padding:12px 20px;text-align:center;min-width:90px">
-          <div style="font-size:1.5rem;font-weight:800;color:#3B82F6">5</div>
-          <div style="font-size:0.72rem;color:var(--text-muted);font-weight:600">OUT TODAY</div>
+        <div class="card" style="padding:12px 18px;text-align:center;min-width:85px">
+          <div style="font-size:1.4rem;font-weight:800;color:#059669" id="total-stock-count">1,820</div>
+          <div style="font-size:0.7rem;color:var(--text-muted);font-weight:700">TOTAL STOCK</div>
         </div>
-        <div class="card" style="padding:12px 20px;text-align:center;min-width:90px">
-          <div style="font-size:1.5rem;font-weight:800;color:#F59E0B">₹4,280</div>
-          <div style="font-size:0.72rem;color:var(--text-muted);font-weight:600">TODAY'S REVENUE</div>
+        <div class="card" style="padding:12px 18px;text-align:center;min-width:85px">
+          <div style="font-size:1.4rem;font-weight:800;color:#DC2626" id="total-sold-count">4,912</div>
+          <div style="font-size:0.7rem;color:var(--text-muted);font-weight:700">🔥 UNITS SOLD</div>
+        </div>
+        <div class="card" style="padding:12px 18px;text-align:center;min-width:85px">
+          <div style="font-size:1.4rem;font-weight:800;color:#F59E0B" id="today-revenue-count">₹4,280</div>
+          <div style="font-size:0.7rem;color:var(--text-muted);font-weight:700">TOTAL REVENUE</div>
         </div>
       </div>
     </div>
@@ -186,10 +190,12 @@ body::before {
 <!-- MAIN CONTENT -->
 <main class="container page-content">
 
-  <!-- MOBILE TABS -->
+  <!-- MOBILE / DESKTOP TABS -->
   <div class="dashboard-tabs" role="tablist">
-    <button class="dash-tab active" data-tab="prescriptions" role="tab" aria-selected="true">📋 Prescriptions (3)</button>
-    <button class="dash-tab" data-tab="medicines" role="tab" aria-selected="false">💊 Medicines</button>
+    <button class="dash-tab active" data-tab="prescriptions" role="tab" aria-selected="true">📋 Prescriptions (<span id="dash-rx-tab-count">3</span>)</button>
+    <button class="dash-tab" data-tab="orders" role="tab" aria-selected="false">📦 Customer Orders (<span id="dash-orders-tab-count">3</span>)</button>
+    <button class="dash-tab" data-tab="medicines" role="tab" aria-selected="false">💊 Medicines Inventory</button>
+    <button class="dash-tab" data-tab="customers" role="tab" aria-selected="false">👥 Customers (<span id="dash-cust-tab-count">0</span>)</button>
   </div>
 
   <!-- DASHBOARD GRID -->
@@ -201,7 +207,7 @@ body::before {
       <!-- Pending -->
       <div class="info-card" style="margin-bottom:20px">
         <div class="info-card-header">
-          📋 Prescriptions
+          📋 Prescriptions Queue
           <span class="badge badge-saffron" style="font-size:0.7rem" id="pending-badge">3 pending</span>
         </div>
         <div id="prescription-list">
@@ -221,8 +227,54 @@ body::before {
 
     </div>
 
-    <!-- RIGHT PANEL: MEDICINE TABLE + BILL BUILDER -->
+    <!-- RIGHT PANEL: MEDICINE TABLE + BILL BUILDER + ORDERS -->
     <div id="dash-right-panel">
+
+      <!-- ORDERS MANAGEMENT SECTION -->
+      <div class="info-card" style="margin-bottom:20px" id="dash-orders-section">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:14px">
+          <div>
+            <div class="info-card-header" style="margin-bottom:2px">📦 Live Customer Orders</div>
+            <div style="font-size:0.8rem;color:var(--text-muted)">Manage order fulfillment, delivery riders, and live tracking</div>
+          </div>
+          <div style="display:flex;gap:6px">
+            <button class="btn btn-sm btn-primary order-dash-filter" onclick="filterDashOrders('all', this)">All</button>
+            <button class="btn btn-sm btn-secondary order-dash-filter" onclick="filterDashOrders('active', this)">🟢 Active</button>
+            <button class="btn btn-sm btn-secondary order-dash-filter" onclick="filterDashOrders('delivered', this)">✅ Delivered</button>
+          </div>
+        </div>
+        <div id="dash-orders-table-container">
+          <!-- Rendered by dashboard.js -->
+        </div>
+      </div>
+
+      <!-- REGISTERED CUSTOMERS (SUPABASE CLOUD) -->
+      <div class="info-card" id="dash-customers-section" style="display:none;margin-bottom:20px">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:14px">
+          <div>
+            <div class="info-card-header" style="margin-bottom:2px">👥 Registered Customers</div>
+            <div style="font-size:0.8rem;color:var(--text-muted)">All customer profiles saved &amp; synchronized with Supabase Database</div>
+          </div>
+          <span class="badge badge-green" style="font-size:0.75rem;padding:4px 10px">⚡ Live Supabase PostgreSQL</span>
+        </div>
+        <div class="table-scroll-wrap">
+          <table class="medicine-table" role="table" aria-label="Registered Customers">
+            <thead>
+              <tr>
+                <th>Customer Name</th>
+                <th>Mobile Number</th>
+                <th>Account Role</th>
+                <th>Delivery Address</th>
+                <th>Joined</th>
+                <th>Role Tag</th>
+              </tr>
+            </thead>
+            <tbody id="customers-table-body">
+              <!-- Rendered by dashboard.js -->
+            </tbody>
+          </table>
+        </div>
+      </div>
 
       <!-- MEDICINE LOOKUP -->
       <div class="info-card" style="margin-bottom:20px" id="medicine-table-section">
@@ -257,10 +309,11 @@ body::before {
                 <th>Medicine</th>
                 <th>Salt</th>
                 <th>Brand</th>
-                <th>Stock</th>
+                <th>📦 Stock</th>
+                <th>🔥 Units Sold</th>
                 <th>Pack</th>
                 <th>Price</th>
-                <th></th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody id="medicine-table-body">

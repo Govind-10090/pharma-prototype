@@ -207,24 +207,44 @@ function applyPincode() {
 }
 
 // ===== SIMULATED OTP LOGIN =====
+// ===== DATABASE-BACKED OTP LOGIN & ROLE-BASED ACCESS =====
 let otpTimerInterval = null;
 let dummyOTP = '1234';
 
+function setLoginRole(role) {
+  // Chemist role is automatically detected from database credentials
+}
+
 function openLoginModal(e) {
-  if (e) e.preventDefault();
+  if (e && e.preventDefault) e.preventDefault();
   const modal = document.getElementById('login-modal');
-  if (!modal) return;
-  
+  if (!modal) {
+    window.location.href = 'login.html';
+    return;
+  }
+
   // Reset views
-  document.getElementById('login-phone-screen').style.display = 'block';
-  document.getElementById('login-loading-screen').style.display = 'none';
-  document.getElementById('login-otp-screen').style.display = 'none';
-  
+  const phoneScreen = document.getElementById('login-phone-screen');
+  const loadingScreen = document.getElementById('login-loading-screen');
+  const otpScreen = document.getElementById('login-otp-screen');
+  if (phoneScreen) phoneScreen.style.display = 'block';
+  if (loadingScreen) loadingScreen.style.display = 'none';
+  if (otpScreen) otpScreen.style.display = 'none';
+
   // Clear inputs
-  document.getElementById('login-phone-input').value = '';
+  const phoneInput = document.getElementById('login-phone-input');
+  const nameInput = document.getElementById('login-name-input');
+  if (phoneInput) phoneInput.value = '';
+  if (nameInput) nameInput.value = '';
   document.querySelectorAll('.otp-digit').forEach(el => el.value = '');
-  
+
   modal.classList.add('open');
+
+  setTimeout(() => {
+    if (phoneInput) phoneInput.focus();
+  }, 100);
+
+  setupOtpDigitAutoAdvance();
 }
 
 function closeLoginModal() {
@@ -233,28 +253,89 @@ function closeLoginModal() {
   clearInterval(otpTimerInterval);
 }
 
-function sendOTP() {
-  const phone = document.getElementById('login-phone-input').value.trim();
+function setupOtpDigitAutoAdvance() {
+  const digits = document.querySelectorAll('.otp-digit');
+  digits.forEach((digit, idx) => {
+    digit.oninput = (e) => {
+      digit.value = digit.value.replace(/[^0-9]/g, '');
+      if (digit.value && idx < digits.length - 1) {
+        digits[idx + 1].focus();
+      }
+    };
+    digit.onkeydown = (e) => {
+      if (e.key === 'Backspace' && !digit.value && idx > 0) {
+        digits[idx - 1].focus();
+      } else if (e.key === 'Enter') {
+        verifyOTP();
+      }
+    };
+  });
+}
+
+async function sendOTP() {
+  const phoneInput = document.getElementById('login-phone-input');
+  const nameInput = document.getElementById('login-name-input');
+  const phone = phoneInput ? phoneInput.value.replace(/[^0-9]/g, '').trim() : '';
+
   if (!/^\d{10}$/.test(phone)) {
     showToast('Please enter a valid 10-digit mobile number', 'error');
+    if (phoneInput) phoneInput.focus();
     return;
   }
-  
-  document.getElementById('login-phone-screen').style.display = 'none';
-  document.getElementById('login-loading-screen').style.display = 'block';
-  
+
+  const phoneScreen = document.getElementById('login-phone-screen');
+  const loadingScreen = document.getElementById('login-loading-screen');
+  const otpScreen = document.getElementById('login-otp-screen');
+
+  if (phoneScreen) phoneScreen.style.display = 'none';
+  if (loadingScreen) loadingScreen.style.display = 'block';
+
+  try {
+    // 1. Check if user exists in database
+    const lookupRes = await fetch(`/api/auth/lookup?phone=${encodeURIComponent(phone)}`);
+    const lookupData = await lookupRes.json();
+
+    if (lookupData.success && lookupData.exists && lookupData.user) {
+      if (nameInput && !nameInput.value) {
+        nameInput.value = lookupData.user.name;
+      }
+      if (lookupData.user.role === 'admin') {
+        showToast(`Welcome back, ${lookupData.user.name}! 🧑‍⚕️`, 'info', 3000);
+      } else {
+        showToast(`Welcome back, ${lookupData.user.name}! 🌿`, 'info', 3000);
+      }
+    } else {
+      showToast('New Customer: Code sent for instant registration! 🌿', 'info', 3000);
+    }
+
+    // 2. Request OTP from backend
+    await fetch('/api/auth/send-otp', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ phone })
+    });
+  } catch (err) {
+    console.warn('[AUTH] Lookup warning:', err);
+  }
+
   setTimeout(() => {
-    document.getElementById('login-loading-screen').style.display = 'none';
-    document.getElementById('login-otp-screen').style.display = 'block';
-    document.getElementById('otp-phone-display').textContent = `+91 ${phone.slice(0,5)} ${phone.slice(5)}`;
-    
-    // Auto-focus first digit
-    const firstDigitInput = document.querySelector('.otp-digit');
-    if (firstDigitInput) firstDigitInput.focus();
-    
+    if (loadingScreen) loadingScreen.style.display = 'none';
+    if (otpScreen) otpScreen.style.display = 'block';
+
+    const phoneDisplay = document.getElementById('otp-phone-display');
+    if (phoneDisplay) {
+      phoneDisplay.textContent = `+91 ${phone.slice(0,5)} ${phone.slice(5)}`;
+    }
+
+    const firstDigit = document.querySelector('.otp-digit');
+    if (firstDigit) {
+      firstDigit.value = '';
+      firstDigit.focus();
+    }
+
     startOTPTimer();
-    showToast('ℹ️ Dummy OTP is 1234', 'info', 5000);
-  }, 1200);
+    showToast('ℹ️ Demo Verification Code is 1234', 'info', 6000);
+  }, 600);
 }
 
 function startOTPTimer() {
@@ -263,7 +344,7 @@ function startOTPTimer() {
   const resendBtn = document.getElementById('otp-resend-btn');
   if (timerText) timerText.style.display = 'block';
   if (resendBtn) resendBtn.style.display = 'none';
-  
+
   clearInterval(otpTimerInterval);
   otpTimerInterval = setInterval(() => {
     seconds--;
@@ -277,51 +358,114 @@ function startOTPTimer() {
 }
 
 function resendOTP() {
-  showToast('OTP Resent! Dummy code is 1234', 'success');
+  showToast('OTP Resent! Demo verification code is 1234', 'success');
   startOTPTimer();
 }
 
-function verifyOTP() {
+async function verifyOTP() {
   let otp = '';
   document.querySelectorAll('.otp-digit').forEach(el => otp += el.value.trim());
-  
+
   if (otp.length < 4) {
     showToast('Please enter all 4 digits', 'error');
     return;
   }
-  
-  if (otp === dummyOTP || otp === '1234') {
+
+  const phoneInput = document.getElementById('login-phone-input');
+  const nameInput = document.getElementById('login-name-input');
+  const phone = phoneInput ? phoneInput.value.replace(/[^0-9]/g, '').trim() : (localStorage.getItem('kp_user_phone') || '9876543210');
+  const name = nameInput ? nameInput.value.trim() : '';
+
+  try {
+    const res = await fetch('/api/auth/verify-otp', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ phone, otp, name })
+    });
+    const data = await res.json();
+
+    if (!data.success || !data.user) {
+      showToast(data.error || 'Invalid OTP. Please use demo code 1234.', 'error');
+      return;
+    }
+
+    const user = data.user;
+
+    // Save logged-in state & customer info in browser storage
     localStorage.setItem('kp_logged_in', 'true');
-    localStorage.setItem('kp_user_name', 'Kirti Customer');
-    showToast('Login successful! Welcome back, Kirti Customer 👤', 'success');
+    localStorage.setItem('kp_user_phone', user.phone);
+    localStorage.setItem('kp_user_name', user.name);
+    localStorage.setItem('kp_user_role', user.role); // 'admin' | 'customer'
+    if (data.token) localStorage.setItem('kp_token', data.token);
+    if (user.addresses) localStorage.setItem('kp_user_addresses', JSON.stringify(user.addresses));
+
     closeLoginModal();
     checkLoginState();
-  } else {
-    showToast('Invalid OTP. Please try again.', 'error');
+
+    // STRICT ROLE-BASED ROUTING:
+    // If chemist/client logged in -> Go to Chemist Dashboard
+    // If ordinary customer logged in -> Stay on / go to Customer page (index.html), NEVER client dashboard!
+    if (user.role === 'admin') {
+      showToast(`🧑‍⚕️ Chemist verified! Welcome, ${user.name}. Opening Chemist Dashboard...`, 'success', 2500);
+      setTimeout(() => {
+        window.location.href = 'dashboard.html';
+      }, 700);
+    } else {
+      showToast(`✅ Welcome, ${user.name}! 👤`, 'success', 3000);
+      // If customer was on login.html or dashboard.html, redirect them to index.html
+      const curPage = window.location.pathname.split('/').pop() || 'index.html';
+      if (curPage === 'dashboard.html' || curPage === 'login.html') {
+        window.location.href = 'index.html';
+      }
+    }
+  } catch (err) {
+    console.error('[AUTH ERROR]:', err);
+    showToast('Failed to verify OTP. Please try again.', 'error');
   }
 }
 
 function logoutUser() {
   localStorage.removeItem('kp_logged_in');
   localStorage.removeItem('kp_user_name');
+  localStorage.removeItem('kp_user_phone');
+  localStorage.removeItem('kp_user_role');
+  localStorage.removeItem('kp_user_addresses');
+  localStorage.removeItem('kp_token');
   showToast('Logged out successfully', 'info');
   checkLoginState();
+
+  const curPage = window.location.pathname.split('/').pop() || 'index.html';
+  if (curPage === 'dashboard.html') {
+    window.location.href = 'index.html';
+  }
 }
 
 function checkLoginState() {
   const loggedIn = localStorage.getItem('kp_logged_in') === 'true';
+  const role = (localStorage.getItem('kp_user_role') || 'customer').toLowerCase();
+  const isAdmin = (loggedIn && (role === 'admin' || role === 'chemist'));
   const loginBtn = document.getElementById('nav-login-btn');
   const userDropdown = document.getElementById('nav-user-dropdown');
   const userVal = document.getElementById('nav-user-name');
-  
+
   if (loggedIn) {
     if (loginBtn) loginBtn.style.display = 'none';
     if (userDropdown) userDropdown.style.display = 'block';
-    if (userVal) userVal.textContent = '👤 Account';
+    const name = localStorage.getItem('kp_user_name') || 'Account';
+    const shortName = name.split(' ')[0] || 'Account';
+    if (userVal) userVal.textContent = isAdmin ? `🧑‍⚕️ ${shortName} ▾` : `👤 ${shortName} ▾`;
   } else {
     if (loginBtn) loginBtn.style.display = 'block';
     if (userDropdown) userDropdown.style.display = 'none';
   }
+
+  // Access Control: Hide Chemist Dashboard from ordinary customers!
+  // Whoever is tagged with admin in database gets Chemist Dashboard access!
+  document.querySelectorAll('a[href="dashboard.html"]').forEach(a => {
+    if (a.closest('#nav-user-menu') || a.closest('#mobile-drawer') || a.classList.contains('tab-item') || a.classList.contains('dropdown-item')) {
+      a.style.display = isAdmin ? '' : 'none';
+    }
+  });
 }
 
 function toggleUserDropdown(e) {
@@ -336,6 +480,15 @@ document.addEventListener('DOMContentLoaded', () => {
   initNavbar();
   updatePincodeUI();
   checkLoginState();
+
+  // If redirected from restricted area (e.g. Chemist Dashboard)
+  const authMsg = sessionStorage.getItem('kp_auth_msg');
+  if (authMsg) {
+    sessionStorage.removeItem('kp_auth_msg');
+    setTimeout(() => {
+      showToast(authMsg, 'warning', 5000);
+    }, 400);
+  }
   
   // Close user dropdown on outside click
   document.addEventListener('click', () => {

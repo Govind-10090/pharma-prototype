@@ -99,9 +99,13 @@ function renderMedicineCard(med, query = '') {
         <div class="medicine-badges">
           ${med.prescription_required ? '<span class="badge badge-rx">Rx</span>' : ''}
           ${med.chronic ? '<span class="badge badge-chronic">Chronic ♻️</span>' : ''}
-          ${inStock
-            ? '<span class="badge badge-instock">● In Stock</span>'
-            : '<span class="badge badge-outstock">● Out of Stock</span>'}
+          ${!inStock
+            ? '<span class="badge badge-outstock">● Out of Stock</span>'
+            : (med.stock <= 10
+                ? `<span class="badge" style="background:#FEF3C7;color:#B45309;font-weight:600">● Low: ${med.stock} left</span>`
+                : `<span class="badge badge-instock">● In Stock (${med.stock})</span>`
+              )}
+          ${(med.sold && med.sold > 0) ? `<span class="badge" style="background:#F8FAFC;color:#475569;border:1px solid #E2E8F0;font-weight:600">🔥 ${med.sold} sold</span>` : ''}
         </div>
         <div class="medicine-price-row">
           <span class="medicine-price">₹${med.price}</span>

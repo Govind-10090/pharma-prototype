@@ -94,6 +94,8 @@ const DEFAULT_MEDICINES = [
 ];
 
 let MEDICINES = [];
+
+// Initialize from storage for instant render, then sync with backend
 if (localStorage.getItem('kirti_medicines')) {
   try {
     MEDICINES = JSON.parse(localStorage.getItem('kirti_medicines'));
@@ -109,5 +111,46 @@ function saveMedicinesToStorage() {
   localStorage.setItem('kirti_medicines', JSON.stringify(MEDICINES));
 }
 
+// Automatically sync with Backend API
+async function syncMedicinesFromBackend() {
+  try {
+    const res = await fetch('/api/medicines');
+    const json = await res.json();
+    if (json.success && json.data && json.data.length > 0) {
+      MEDICINES = json.data;
+      saveMedicinesToStorage();
+
+      // Trigger re-render across active pages
+      if (typeof renderGrid === 'function') renderGrid();
+      if (typeof renderCartPage === 'function') renderCartPage();
+      if (typeof renderMedicineTable === 'function') renderMedicineTable();
+    }
+  } catch (err) {
+    console.log('[Kirti Pharma] Backend offline or using local cached medicines.');
+  }
+}
+
+// Sync on load
+if (typeof window !== 'undefined') {
+  document.addEventListener('DOMContentLoaded', () => {
+    syncMedicinesFromBackend();
+
+    // Listen for live SSE updates
+    if (window.EventSource) {
+      try {
+        const es = new EventSource('/api/events');
+        es.onmessage = (event) => {
+          try {
+            const data = JSON.parse(event.data);
+            if (data.type === 'medicine_added' || data.type === 'medicine_updated' || data.type === 'medicine_deleted') {
+              syncMedicinesFromBackend();
+            }
+          } catch (e) {}
+        };
+      } catch (e) {}
+    }
+  });
+}
+
 // Export for module usage or global
-if (typeof module !== 'undefined') module.exports = { MEDICINES, saveMedicinesToStorage };
+if (typeof module !== 'undefined') module.exports = { MEDICINES, saveMedicinesToStorage, DEFAULT_MEDICINES };

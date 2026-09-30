@@ -86,8 +86,34 @@ function initDropzone() {
     dropzone.querySelector('.dropzone-icon').textContent = '✅';
     dropzone.querySelector('.dropzone-title').textContent = 'Prescription uploaded!';
 
+    // Send file to Backend API
+    const formData = new FormData();
+    formData.append('prescription', file);
+    formData.append('patient', localStorage.getItem('kp_user_name') || 'Kirti Customer');
+    formData.append('phone', localStorage.getItem('kp_user_phone') || '9876543210');
+    formData.append('source', 'App');
+
+    fetch('/api/prescriptions', {
+      method: 'POST',
+      body: formData
+    })
+    .then(r => r.json())
+    .then(data => {
+      console.log('[KP] Prescription stored on server:', data);
+    })
+    .catch(err => {
+      console.warn('Backend upload failed, stored in local preview:', err);
+    });
+
     // Show success message
     if (successMsg) {
+      successMsg.innerHTML = `
+        <span style="font-size:1.5rem">✅</span>
+        <div style="flex:1">
+          <div style="font-weight:700;color:#065F46;margin-bottom:2px">Prescription received!</div>
+          <div style="font-size:0.82rem;color:#047857">Our pharmacist will verify and prepare your bill within 30 minutes.</div>
+        </div>
+      `;
       successMsg.style.display = 'flex';
       successMsg.style.opacity = '0';
       setTimeout(() => {
@@ -96,7 +122,7 @@ function initDropzone() {
       }, 50);
     }
 
-    showToast('Prescription uploaded successfully!', 'success');
+    showToast('Prescription uploaded successfully to Kirti Pharma! 📋', 'success');
 
     // Track upload
     logUploadEvent(file.name);

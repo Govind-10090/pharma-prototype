@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login / Register — Kirti Pharma</title>
+  <meta name="description" content="Login to your Kirti Pharma account. Access medicine orders, prescription history, and fast Gondia delivery.">
+  <link rel="stylesheet" href="css/style.css?v=2">
+  <link rel="stylesheet" href="css/components.css?v=2">
+  <link rel="stylesheet" href="css/responsive.css?v=2">
+  <style>
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background-image: url('images/bg.jpeg');
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-attachment: fixed;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    .login-page-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.45);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 0;
+    }
+
+    .login-container {
+      position: relative;
+      z-index: 1;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+    }
+
+    .login-card {
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(16px);
+      border-radius: 20px;
+      padding: 36px 32px;
+      width: 100%;
+      max-width: 440px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.18), 0 1px 3px rgba(0, 0, 0, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      text-align: center;
+      animation: popIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes popIn {
+      from { transform: scale(0.95); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .login-logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 20px;
+      text-decoration: none;
+    }
+
+    .login-logo img {
+      height: 48px;
+      object-fit: contain;
+    }
+
+    .role-pills {
+      display: flex;
+      background: #f1f5f9;
+      border-radius: 12px;
+      padding: 4px;
+      margin-bottom: 24px;
+      gap: 4px;
+    }
+
+    .role-pill {
+      flex: 1;
+      padding: 10px 14px;
+      border: none;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      background: transparent;
+      color: #64748b;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .role-pill.active {
+      background: #006642;
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(0, 102, 66, 0.25);
+    }
+
+    .form-group-custom {
+      text-align: left;
+      margin-bottom: 16px;
+    }
+
+    .form-group-custom label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: #334155;
+      margin-bottom: 6px;
+    }
+
+    .input-phone-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .input-phone-prefix {
+      position: absolute;
+      left: 14px;
+      font-weight: 700;
+      font-size: 14px;
+      color: #64748b;
+    }
+
+    .custom-phone-input {
+      width: 100%;
+      padding: 12px 14px 12px 50px !important;
+      font-size: 15px !important;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 10px;
+      outline: none;
+      transition: border 0.2s;
+    }
+
+    .custom-phone-input:focus {
+      border-color: #006642;
+      box-shadow: 0 0 0 3px rgba(0, 102, 66, 0.12);
+    }
+
+    .custom-name-input {
+      width: 100%;
+      padding: 12px 14px !important;
+      font-size: 15px !important;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 10px;
+      outline: none;
+      box-sizing: border-box;
+      transition: border 0.2s;
+    }
+
+    .custom-name-input:focus {
+      border-color: #006642;
+      box-shadow: 0 0 0 3px rgba(0, 102, 66, 0.12);
+    }
+
+    .btn-submit {
+      width: 100%;
+      padding: 13px;
+      font-size: 15px;
+      font-weight: 700;
+      border-radius: 10px;
+      background: #006642;
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+    }
+
+    .btn-submit:hover {
+      background: #005034;
+    }
+
+    .btn-submit:active {
+      transform: scale(0.99);
+    }
+
+    .db-status-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: #059669;
+      font-weight: 600;
+      background: #ecfdf5;
+      padding: 4px 10px;
+      border-radius: 20px;
+      margin-top: 18px;
+    }
+
+    .db-pulse {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.4);
+      animation: pulse 1.8s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+      70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+      100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+    }
+  </style>
+</head>
+<body>
+
+<div class="login-page-overlay"></div>
+
+<div class="login-container">
+  <div class="login-card">
+    
+    <!-- Brand Logo -->
+    <a href="index.html" class="login-logo" title="Back to Kirti Pharma Home">
+      <img src="images/kirti-logo.png" alt="Kirti Pharma">
+    </a>
+
+    <!-- Header Description -->
+    <div id="login-intro-text">
+      <h3 style="margin: 0 0 6px; font-size: 1.25rem; font-weight: 800; color: #0f172a;" id="page-title">
+        Login / Register
+      </h3>
+      <p style="margin: 0 0 22px; font-size: 0.85rem; color: #64748b; line-height: 1.4;" id="page-sub">
+        Enter your mobile number to access your account &amp; orders.
+      </p>
+    </div>
+
+    <!-- Screen 1: Mobile & Name Input -->
+    <div id="screen-input">
+      <div class="form-group-custom" id="name-input-group">
+        <label for="input-customer-name">Full Name <span style="font-weight:400;color:#94a3b8">(New customers)</span></label>
+        <input type="text" id="input-customer-name" class="custom-name-input" placeholder="e.g. Ramesh Patel">
+      </div>
+
+      <div class="form-group-custom">
+        <label for="input-customer-phone">Mobile Number</label>
+        <div class="input-phone-wrap">
+          <span class="input-phone-prefix">+91</span>
+          <input type="tel" id="input-customer-phone" class="custom-phone-input" placeholder="10-digit mobile number" maxlength="10">
+        </div>
+      </div>
+
+      <button type="button" class="btn-submit" onclick="doSendOtp()">
+        Send Verification OTP
+      </button>
+
+      <div style="font-size: 12px; color: #94a3b8; margin-top: 14px;">
+        💡 Demo Verification OTP is <strong>1234</strong>
+      </div>
+    </div>
+
+    <!-- Screen 2: OTP Verification Screen -->
+    <div id="screen-otp" style="display:none">
+      <div style="font-size: 2.2rem; margin-bottom: 10px;">🔑</div>
+      <h4 style="margin: 0 0 6px; font-size: 1.15rem; font-weight: 800; color: #0f172a;">Verify Mobile OTP</h4>
+      <p style="font-size: 0.85rem; color: #64748b; margin: 0 0 20px;">
+        Code sent to <strong id="display-otp-phone" style="color:#0f172a"></strong>
+      </p>
+
+      <div class="otp-input-wrap">
+        <input type="text" class="otp-digit page-otp-digit" maxlength="1" inputmode="numeric">
+        <input type="text" class="otp-digit page-otp-digit" maxlength="1" inputmode="numeric">
+        <input type="text" class="otp-digit page-otp-digit" maxlength="1" inputmode="numeric">
+        <input type="text" class="otp-digit page-otp-digit" maxlength="1" inputmode="numeric">
+      </div>
+
+      <button type="button" class="btn-submit" onclick="doVerifyOtp()">
+        Verify &amp; Continue
+      </button>
+
+      <div class="otp-timer" style="margin-top: 14px;">
+        <span id="page-timer-text">Resend in 30s</span>
+        <button id="page-resend-btn" class="otp-resend-link" style="display:none" onclick="doResendOtp()">Resend Code</button>
+      </div>
+
+      <div style="margin-top: 16px;">
+        <a href="#" onclick="goBackToInput(event)" style="font-size:13px;color:#64748b;text-decoration:none">← Change Mobile Number</a>
+      </div>
+    </div>
+
+    <!-- Database Status Tag -->
+    <div class="db-status-tag">
+      <span class="db-pulse"></span>
+      <span>Connected to Supabase PostgreSQL Database</span>
+    </div>
+
+    <div style="margin-top: 20px; font-size: 13px;">
+      <a href="index.html" style="color: #006642; font-weight: 600; text-decoration: none;">← Return to Store</a>
+    </div>
+
+  </div>
+</div>
+
+<div id="toast-container"></div>
+
+<script src="js/app.js"></script>
+<script>
+let currentRole = 'customer';
+let timerInterval = null;
+
+
+
+async function doSendOtp() {
+  const phoneInput = document.getElementById('input-customer-phone');
+  const nameInput = document.getElementById('input-customer-name');
+  const phone = (phoneInput.value || '').replace(/[^0-9]/g, '').trim();
+
+  if (!/^\d{10}$/.test(phone)) {
+    showToast('Please enter a valid 10-digit mobile number', 'error');
+    phoneInput.focus();
+    return;
+  }
+
+  try {
+    // Check if customer exists in Supabase
+    const res = await fetch(`/api/auth/lookup?phone=${phone}`);
+    const data = await res.json();
+    if (data.success && data.exists && data.user) {
+      if (nameInput && !nameInput.value) nameInput.value = data.user.name;
+      if (data.user.role === 'admin') {
+        showToast(`Welcome back, ${data.user.name}! 🧑‍⚕️`, 'info', 3000);
+      } else {
+        showToast(`Welcome back, ${data.user.name}! 🌿`, 'info', 3000);
+      }
+    } else {
+      showToast('New customer registration: Sending code! 🌿', 'info', 3000);
+    }
+
+    await fetch('/api/auth/send-otp', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ phone })
+    });
+  } catch (e) {}
+
+  document.getElementById('screen-input').style.display = 'none';
+  document.getElementById('screen-otp').style.display = 'block';
+  document.getElementById('display-otp-phone').textContent = `+91 ${phone.slice(0,5)} ${phone.slice(5)}`;
+
+  const digits = document.querySelectorAll('.page-otp-digit');
+  digits.forEach(d => d.value = '');
+  if (digits[0]) digits[0].focus();
+
+  startTimer();
+  showToast('ℹ️ Verification Code is 1234', 'info', 5000);
+}
+
+function startTimer() {
+  let sec = 30;
+  const text = document.getElementById('page-timer-text');
+  const btn = document.getElementById('page-resend-btn');
+  text.style.display = 'block';
+  btn.style.display = 'none';
+
+  clearInterval(timerInterval);
+  timerInterval = setInterval(() => {
+    sec--;
+    text.textContent = `Resend in ${sec}s`;
+    if (sec <= 0) {
+      clearInterval(timerInterval);
+      text.style.display = 'none';
+      btn.style.display = 'inline-block';
+    }
+  }, 1000);
+}
+
+function doResendOtp() {
+  showToast('OTP Resent! Demo verification code is 1234', 'success');
+  startTimer();
+}
+
+function goBackToInput(e) {
+  e.preventDefault();
+  document.getElementById('screen-otp').style.display = 'none';
+  document.getElementById('screen-input').style.display = 'block';
+}
+
+async function doVerifyOtp() {
+  let otp = '';
+  document.querySelectorAll('.page-otp-digit').forEach(d => otp += d.value.trim());
+
+  if (otp.length < 4) {
+    showToast('Please enter all 4 digits', 'error');
+    return;
+  }
+
+  const phone = document.getElementById('input-customer-phone').value.replace(/[^0-9]/g, '').trim();
+  const name = document.getElementById('input-customer-name').value.trim();
+
+  try {
+    const res = await fetch('/api/auth/verify-otp', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ phone, otp, name })
+    });
+    const data = await res.json();
+
+    if (!data.success || !data.user) {
+      showToast(data.error || 'Invalid OTP. Use demo code 1234.', 'error');
+      return;
+    }
+
+    const user = data.user;
+    localStorage.setItem('kp_logged_in', 'true');
+    localStorage.setItem('kp_user_phone', user.phone);
+    localStorage.setItem('kp_user_name', user.name);
+    localStorage.setItem('kp_user_role', user.role);
+    if (data.token) localStorage.setItem('kp_token', data.token);
+    if (user.addresses) localStorage.setItem('kp_user_addresses', JSON.stringify(user.addresses));
+
+    // Role-based routing:
+    if (user.role === 'admin') {
+      showToast(`🧑‍⚕️ Chemist verified! Opening Chemist Dashboard...`, 'success', 2000);
+      setTimeout(() => {
+        window.location.href = 'dashboard.html';
+      }, 700);
+    } else {
+      showToast(`✅ Welcome, ${user.name}! Opening customer store...`, 'success', 2000);
+      setTimeout(() => {
+        window.location.href = 'index.html';
+      }, 700);
+    }
+  } catch (err) {
+    showToast('Failed to verify OTP. Please try again.', 'error');
+  }
+}
+
+// Setup auto-advance for digits
+document.addEventListener('DOMContentLoaded', () => {
+
+  const digits = document.querySelectorAll('.page-otp-digit');
+  digits.forEach((digit, idx) => {
+    digit.addEventListener('input', () => {
+      digit.value = digit.value.replace(/[^0-9]/g, '');
+      if (digit.value && idx < digits.length - 1) {
+        digits[idx + 1].focus();
+      }
+    });
+    digit.addEventListener('keydown', (e) => {
+      if (e.key === 'Backspace' && !digit.value && idx > 0) {
+        digits[idx - 1].focus();
+      } else if (e.key === 'Enter') {
+        doVerifyOtp();
+      }
+    });
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,325 @@
+[
+  {
+    "id": "KP-2848",
+    "customerName": "Vaibhav",
+    "phone": "9876543210",
+    "date": "Today",
+    "placed": "4:48 PM",
+    "status": "delivery",
+    "paymentMethod": "Google Pay",
+    "paymentStatus": "Paid",
+    "deliveryAddress": "Gondia Main Road",
+    "items": [
+      {
+        "id": 1,
+        "name": "Crocin 650mg",
+        "brand": "GSK",
+        "packUnit": "tablets",
+        "price": 32,
+        "qty": 1
+      },
+      {
+        "id": 2,
+        "name": "Dolo 650",
+        "brand": "Micro Labs",
+        "packUnit": "tablets",
+        "price": 28,
+        "qty": 2
+      }
+    ],
+    "subtotal": 88,
+    "deliveryFee": 30,
+    "total": 118,
+    "prescriptionId": null,
+    "notes": "",
+    "rider": {
+      "id": "rider-1",
+      "name": "Rahul Kurmi",
+      "initials": "RK",
+      "phone": "+919876543210",
+      "distance": "2.3 km",
+      "eta": "~18 mins",
+      "rating": "4.9 ⭐",
+      "vehicle": "Hero Splendor (MH-35-AQ-1244)"
+    },
+    "stages": [
+      {
+        "id": "confirmed",
+        "label": "Order Confirmed",
+        "time": "4:48 PM",
+        "status": "done",
+        "icon": "✅"
+      },
+      {
+        "id": "preparing",
+        "label": "Being Prepared",
+        "time": "In Progress",
+        "status": "done",
+        "icon": "💊"
+      },
+      {
+        "id": "delivery",
+        "label": "Out for Delivery",
+        "time": "4:48 PM",
+        "status": "active",
+        "icon": "🛵"
+      },
+      {
+        "id": "delivered",
+        "label": "Delivered",
+        "time": "Pending",
+        "status": "pending",
+        "icon": "📦"
+      }
+    ],
+    "estimatedDelivery": "Within 45 mins",
+    "createdAt": "2026-09-30T11:18:20.075Z",
+    "updatedAt": "2026-09-30T11:18:36.932Z"
+  },
+  {
+    "id": "KP-2847",
+    "customerName": "Kirti Customer",
+    "phone": "9876543210",
+    "date": "Today",
+    "placed": "4:12 PM",
+    "status": "delivery",
+    "paymentMethod": "Google Pay",
+    "paymentStatus": "Paid",
+    "deliveryAddress": "Flat 302, Sai Shraddha Apts, Ring Road, Gondia - 441614",
+    "items": [
+      {
+        "id": 1,
+        "name": "Crocin 650mg",
+        "brand": "GSK",
+        "qty": 2,
+        "price": 32,
+        "packUnit": "tablets"
+      },
+      {
+        "id": 37,
+        "name": "Becosules",
+        "brand": "Pfizer",
+        "qty": 1,
+        "price": 82,
+        "packUnit": "capsules"
+      },
+      {
+        "id": 17,
+        "name": "Pantoprazole 40mg",
+        "brand": "Sun Pharma",
+        "qty": 1,
+        "price": 58,
+        "packUnit": "tablets"
+      }
+    ],
+    "subtotal": 204,
+    "deliveryFee": 30,
+    "total": 234,
+    "rider": {
+      "id": "rider-1",
+      "name": "Rahul Kurmi",
+      "initials": "RK",
+      "phone": "+919876543210",
+      "distance": "2.3 km",
+      "eta": "~18 mins",
+      "rating": "4.9 ⭐",
+      "vehicle": "Hero Splendor (MH-35-AQ-1244)"
+    },
+    "stages": [
+      {
+        "id": "confirmed",
+        "label": "Order Confirmed",
+        "time": "4:12 PM",
+        "status": "done",
+        "icon": "✅"
+      },
+      {
+        "id": "preparing",
+        "label": "Being Prepared",
+        "time": "4:35 PM",
+        "status": "done",
+        "icon": "✅"
+      },
+      {
+        "id": "delivery",
+        "label": "Out for Delivery",
+        "time": "Est. 5:50 PM",
+        "status": "active",
+        "icon": "🛵"
+      },
+      {
+        "id": "delivered",
+        "label": "Delivered",
+        "time": "Pending",
+        "status": "pending",
+        "icon": "📦"
+      }
+    ],
+    "estimatedDelivery": "6:30 PM",
+    "createdAt": "2026-09-30T10:56:45.349Z"
+  },
+  {
+    "id": "KP-2810",
+    "customerName": "Kirti Customer",
+    "phone": "9876543210",
+    "date": "28 Sep 2026",
+    "placed": "11:20 AM",
+    "status": "delivered",
+    "paymentMethod": "PhonePe",
+    "paymentStatus": "Paid",
+    "deliveryAddress": "Shop No 4, Main Bazar, Gondia - 441601",
+    "items": [
+      {
+        "id": 2,
+        "name": "Dolo 650",
+        "brand": "Micro Labs",
+        "qty": 1,
+        "price": 28,
+        "packUnit": "tablets"
+      },
+      {
+        "id": 36,
+        "name": "Shelcal 500",
+        "brand": "Torrent",
+        "qty": 1,
+        "price": 198,
+        "packUnit": "tablets"
+      },
+      {
+        "id": 35,
+        "name": "Vitamin D3 60K",
+        "brand": "Mankind",
+        "qty": 1,
+        "price": 145,
+        "packUnit": "capsules"
+      }
+    ],
+    "subtotal": 371,
+    "deliveryFee": 30,
+    "total": 401,
+    "rider": {
+      "id": "rider-2",
+      "name": "Amit Sharma",
+      "initials": "AS",
+      "phone": "+919876543215",
+      "distance": "3.5 km",
+      "eta": "~25 mins",
+      "rating": "4.8 ⭐",
+      "vehicle": "Honda Activa (MH-35-BZ-9021)"
+    },
+    "stages": [
+      {
+        "id": "confirmed",
+        "label": "Order Confirmed",
+        "time": "11:20 AM",
+        "status": "done",
+        "icon": "✅"
+      },
+      {
+        "id": "preparing",
+        "label": "Being Prepared",
+        "time": "11:35 AM",
+        "status": "done",
+        "icon": "✅"
+      },
+      {
+        "id": "delivery",
+        "label": "Out for Delivery",
+        "time": "12:05 PM",
+        "status": "done",
+        "icon": "🛵"
+      },
+      {
+        "id": "delivered",
+        "label": "Delivered",
+        "time": "12:40 PM",
+        "status": "done",
+        "icon": "📦"
+      }
+    ],
+    "estimatedDelivery": "12:45 PM",
+    "createdAt": "2026-09-28T10:56:45.349Z"
+  },
+  {
+    "id": "KP-2795",
+    "customerName": "Kirti Customer",
+    "phone": "9876543210",
+    "date": "22 Sep 2026",
+    "placed": "02:45 PM",
+    "status": "delivered",
+    "paymentMethod": "Cash on Delivery",
+    "paymentStatus": "Paid",
+    "deliveryAddress": "Flat 302, Sai Shraddha Apts, Ring Road, Gondia - 441614",
+    "items": [
+      {
+        "id": 9,
+        "name": "Azithral 500mg",
+        "brand": "Alembic",
+        "qty": 1,
+        "price": 89,
+        "packUnit": "tablets"
+      },
+      {
+        "id": 3,
+        "name": "Combiflam",
+        "brand": "Sanofi",
+        "qty": 2,
+        "price": 42,
+        "packUnit": "tablets"
+      },
+      {
+        "id": 40,
+        "name": "Limcee 500mg",
+        "brand": "Abbott",
+        "qty": 2,
+        "price": 38,
+        "packUnit": "tablets"
+      }
+    ],
+    "subtotal": 249,
+    "deliveryFee": 30,
+    "total": 279,
+    "rider": {
+      "id": "rider-1",
+      "name": "Rahul Kurmi",
+      "initials": "RK",
+      "phone": "+919876543210",
+      "distance": "2.3 km",
+      "eta": "~18 mins",
+      "rating": "4.9 ⭐",
+      "vehicle": "Hero Splendor (MH-35-AQ-1244)"
+    },
+    "stages": [
+      {
+        "id": "confirmed",
+        "label": "Order Confirmed",
+        "time": "02:45 PM",
+        "status": "done",
+        "icon": "✅"
+      },
+      {
+        "id": "preparing",
+        "label": "Being Prepared",
+        "time": "03:10 PM",
+        "status": "done",
+        "icon": "✅"
+      },
+      {
+        "id": "delivery",
+        "label": "Out for Delivery",
+        "time": "03:40 PM",
+        "status": "done",
+        "icon": "🛵"
+      },
+      {
+        "id": "delivered",
+        "label": "Delivered",
+        "time": "04:15 PM",
+        "status": "done",
+        "icon": "📦"
+      }
+    ],
+    "estimatedDelivery": "04:20 PM",
+    "createdAt": "2026-09-22T10:56:45.349Z"
+  }
+]

@@ -124,8 +124,8 @@ body::before {
       <div class="nav-user-dropdown" id="nav-user-dropdown" style="display:none">
         <button class="nav-user-btn" id="nav-user-name" onclick="toggleUserDropdown(event)">👤 Account</button>
         <div class="dropdown-menu" id="nav-user-menu">
-          <a href="dashboard.html" class="dropdown-item">🧑‍⚕️ Chemist Dashboard</a>
           <a href="track.html" class="dropdown-item">📦 Track Orders</a>
+          <a href="dashboard.html" class="dropdown-item">🧑‍⚕️ Chemist Dashboard</a>
           <div style="border-top:1px solid var(--border);margin:4px 0"></div>
           <button class="dropdown-item" onclick="logoutUser()">Logout</button>
         </div>
@@ -144,7 +144,7 @@ body::before {
   <a href="track.html">📦 Track Order</a>
   <div class="mobile-nav-divider"></div>
   <a href="cart.html">🛒 Cart</a>
-  <a href="dashboard.html">🧑‍⚕️ Dashboard</a>
+  <a href="dashboard.html">🧑‍⚕️ Chemist Dashboard</a>
 </div>
 
 <!-- HERO STRIP -->
@@ -364,29 +364,41 @@ body::before {
 
 <!-- OTP LOGIN MODAL -->
 <div class="modal-overlay" id="login-modal" role="dialog" aria-modal="true" aria-labelledby="login-title">
-  <div class="modal-box" style="max-width:420px">
+  <div class="modal-box" style="max-width:440px">
     <div class="modal-header">
       <h3 class="modal-title" id="login-title">Login / Register</h3>
       <button class="modal-close" onclick="closeLoginModal()" aria-label="Close modal">✕</button>
     </div>
-    <div class="modal-body login-modal-body" style="padding:32px 24px">
-      <!-- Screen 1: Mobile Input -->
+    <div class="modal-body login-modal-body" style="padding:24px 24px 32px">
+
+      <!-- Screen 1: Mobile & Name Input -->
       <div id="login-phone-screen">
         <div class="login-modal-logo">🌿</div>
-        <h4 class="login-modal-title">Welcome to Kirti Pharma</h4>
-        <p class="login-modal-sub">Enter your mobile number to login or register.</p>
-        <div class="form-group" style="position:relative">
-          <span class="login-phone-prefix">+91</span>
-          <input type="tel" id="login-phone-input" class="form-input login-phone-input" placeholder="Enter 10-digit mobile number" maxlength="10">
+        <h4 class="login-modal-title" id="login-modal-title-text">Welcome to Kirti Pharma</h4>
+        <p class="login-modal-sub" id="login-role-desc">Enter your mobile number to access your account &amp; saved orders.</p>
+        
+        <div class="form-group" style="margin-bottom:14px;text-align:left" id="login-name-group">
+          <label style="font-size:12px;font-weight:600;color:#374151;display:block;margin-bottom:4px">Your Full Name (New Customers)</label>
+          <input type="text" id="login-name-input" class="form-input" placeholder="e.g. Ramesh Patel" style="width:100%;box-sizing:border-box">
         </div>
-        <button class="btn btn-primary btn-full btn-lg mt-16" onclick="sendOTP()">Send OTP</button>
+
+        <div class="form-group" style="position:relative;text-align:left">
+          <label style="font-size:12px;font-weight:600;color:#374151;display:block;margin-bottom:4px">10-Digit Mobile Number</label>
+          <div style="position:relative">
+            <span class="login-phone-prefix">+91</span>
+            <input type="tel" id="login-phone-input" class="form-input login-phone-input" placeholder="Enter 10-digit number" maxlength="10" style="width:100%;box-sizing:border-box">
+          </div>
+        </div>
+
+        <button class="btn btn-primary btn-full btn-lg mt-16" onclick="sendOTP()" style="border-radius:10px">Send Verification OTP</button>
+        <div style="font-size:11px;color:#9ca3af;margin-top:10px">🔒 Secure OTP verification • Demo OTP code is <strong>1234</strong></div>
       </div>
       
       <!-- Screen 2: Loading -->
       <div id="login-loading-screen" style="display:none;padding:24px 0">
         <div class="spinner" style="border-top-color:var(--green-primary);width:36px;height:36px;border-width:4px;margin-bottom:16px"></div>
-        <h4 class="login-modal-title">Sending OTP...</h4>
-        <p class="login-modal-sub">Generating secure code for verification.</p>
+        <h4 class="login-modal-title">Connecting to Kirti Pharma Cloud...</h4>
+        <p class="login-modal-sub">Checking database &amp; generating secure code.</p>
       </div>
       
       <!-- Screen 3: OTP Verification -->
@@ -395,16 +407,17 @@ body::before {
         <h4 class="login-modal-title">Verify OTP</h4>
         <p class="login-modal-sub">Enter the 4-digit code sent to <strong id="otp-phone-display"></strong></p>
         <div class="otp-input-wrap">
-          <input type="text" class="otp-digit" maxlength="1">
-          <input type="text" class="otp-digit" maxlength="1">
-          <input type="text" class="otp-digit" maxlength="1">
-          <input type="text" class="otp-digit" maxlength="1">
+          <input type="text" class="otp-digit" maxlength="1" inputmode="numeric">
+          <input type="text" class="otp-digit" maxlength="1" inputmode="numeric">
+          <input type="text" class="otp-digit" maxlength="1" inputmode="numeric">
+          <input type="text" class="otp-digit" maxlength="1" inputmode="numeric">
         </div>
-        <button class="btn btn-primary btn-full btn-lg" onclick="verifyOTP()">Verify &amp; Proceed</button>
+        <button class="btn btn-primary btn-full btn-lg" onclick="verifyOTP()" style="border-radius:10px">Verify &amp; Enter</button>
         <div class="otp-timer">
           <span id="otp-timer-text">Resend OTP in 30s</span>
           <button id="otp-resend-btn" class="otp-resend-link" style="display:none" onclick="resendOTP()">Resend OTP</button>
         </div>
+        <div style="font-size:11px;color:#10b981;font-weight:600;margin-top:12px">⚡ Live Supabase Database Connected</div>
       </div>
     </div>
   </div>

@@ -1,0 +1,22 @@
+[
+  {
+    "id": "rider-1",
+    "name": "Rahul Kurmi",
+    "initials": "RK",
+    "phone": "+919876543210",
+    "distance": "2.3 km",
+    "eta": "~18 mins",
+    "rating": "4.9 ⭐",
+    "vehicle": "Hero Splendor (MH-35-AQ-1244)"
+  },
+  {
+    "id": "rider-2",
+    "name": "Amit Sharma",
+    "initials": "AS",
+    "phone": "+919876543215",
+    "distance": "3.5 km",
+    "eta": "~25 mins",
+    "rating": "4.8 ⭐",
+    "vehicle": "Honda Activa (MH-35-BZ-9021)"
+  }
+]

@@ -176,7 +176,7 @@ function selectPayment(id) {
 }
 
 // ===== CHECKOUT =====
-function handleCheckout() {
+async function handleCheckout() {
   const cart = getCart();
   if (!cart.length) { showToast('Your cart is empty!', 'error'); return; }
   if (getCartTotal() < KP.MIN_ORDER) { showToast(`Minimum order is ₹${KP.MIN_ORDER}`, 'error'); return; }
@@ -188,13 +188,42 @@ function handleCheckout() {
     btn.innerHTML = '⏳ Processing...';
   }
 
+  // Get selected delivery address text
+  const selectedAddrCard = document.querySelector('.address-card.selected');
+  const addrText = selectedAddrCard ? selectedAddrCard.innerText.replace(/\s+/g, ' ').trim() : 'Flat 302, Sai Shraddha Apts, Ring Road, Gondia - 441614';
+
+  const customerName = localStorage.getItem('kp_user_name') || 'Kirti Customer';
+  const customerPhone = localStorage.getItem('kp_user_phone') || '9876543210';
+
+  let orderId = 'KP-2847';
+
+  try {
+    const res = await fetch('/api/orders', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        customerName,
+        phone: customerPhone,
+        items: cart,
+        deliveryAddress: addrText,
+        paymentMethod: method?.name || 'UPI'
+      })
+    });
+    const json = await res.json();
+    if (json.success && json.data) {
+      orderId = json.data.id;
+    }
+  } catch (err) {
+    console.warn('Backend unavailable, using local order flow:', err);
+  }
+
+  localStorage.setItem('kp_last_order_id', orderId);
+  showToast(`✅ Order #${orderId} placed via ${method?.name || 'UPI'}! Redirecting...`, 'success', 2500);
+  clearCart();
+
   setTimeout(() => {
-    showToast(`✅ Order placed via ${method?.name || 'UPI'}! Redirecting...`, 'success', 2000);
-    clearCart();
-    setTimeout(() => {
-      window.location.href = 'track.html';
-    }, 1500);
-  }, 1000);
+    window.location.href = `track.html?orderId=${orderId}`;
+  }, 1200);
 }
 
 // ===== ADDRESS SELECTOR =====

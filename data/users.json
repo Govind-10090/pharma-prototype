@@ -1,0 +1,32 @@
+[
+  {
+    "id": "user-default",
+    "name": "Kirti Customer",
+    "phone": "9876543210",
+    "email": "customer@kirtipharma.com",
+    "role": "customer",
+    "addresses": [
+      {
+        "id": "addr-1",
+        "tag": "Home",
+        "text": "Flat 302, Sai Shraddha Apts, Ring Road, Gondia - 441614",
+        "isDefault": true
+      },
+      {
+        "id": "addr-2",
+        "tag": "Shop / Work",
+        "text": "Shop No 4, Main Bazar, Gondia - 441601",
+        "isDefault": false
+      }
+    ],
+    "createdAt": "2026-09-30T10:56:45.348Z"
+  },
+  {
+    "id": "user-admin",
+    "name": "Dr. Kirti Agrawal (Pharmacist)",
+    "phone": "9876540000",
+    "email": "admin@kirtipharma.com",
+    "role": "admin",
+    "createdAt": "2026-09-30T10:56:45.349Z"
+  }
+]

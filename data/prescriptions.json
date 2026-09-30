@@ -1,0 +1,87 @@
+[
+  {
+    "id": 1,
+    "patient": "Meena Deshpande",
+    "initials": "MD",
+    "phone": "+919876543211",
+    "source": "App",
+    "status": "Pending",
+    "color": "#7C3AED",
+    "time": "3:45 PM",
+    "date": "Today",
+    "fileName": "prescription-meena.jpg",
+    "fileUrl": "images/med_fever_pain.png",
+    "notes": "Please check if dosage is twice daily as Dr. suggested.",
+    "createdAt": "2026-09-30T07:56:45.349Z"
+  },
+  {
+    "id": 2,
+    "patient": "Suresh Bawane",
+    "initials": "SB",
+    "phone": "+919876543212",
+    "source": "WhatsApp",
+    "status": "Pending",
+    "color": "#2563EB",
+    "time": "4:02 PM",
+    "date": "Today",
+    "fileName": "rx_whatsapp_suresh.png",
+    "fileUrl": "images/med_chronic.png",
+    "notes": "Monthly diabetes and blood pressure refills.",
+    "createdAt": "2026-09-30T08:56:45.349Z"
+  },
+  {
+    "id": 3,
+    "patient": "Priya Nagpure",
+    "initials": "PN",
+    "phone": "+919876543213",
+    "source": "App",
+    "status": "Pending",
+    "color": "#DB2777",
+    "time": "4:28 PM",
+    "date": "Today",
+    "fileName": "priya_rx.pdf",
+    "fileUrl": "images/med_antibiotics.png",
+    "notes": "Prescribed by Dr. Kulkarni for throat infection.",
+    "createdAt": "2026-09-30T09:56:45.349Z"
+  },
+  {
+    "id": 4,
+    "patient": "Kirti Customer",
+    "initials": "KC",
+    "phone": "9876543210",
+    "source": "App",
+    "status": "Completed",
+    "color": "#059669",
+    "time": "1:15 PM",
+    "date": "Today",
+    "fileName": "kirti_family_rx.jpg",
+    "fileUrl": "images/med_fever_pain.png",
+    "notes": "Seasonal flu medicines",
+    "bill": {
+      "items": [
+        {
+          "name": "Crocin 650mg",
+          "qty": 2,
+          "unitPrice": 32,
+          "total": 64
+        },
+        {
+          "name": "Becosules",
+          "qty": 1,
+          "unitPrice": 82,
+          "total": 82
+        },
+        {
+          "name": "Pantoprazole 40mg",
+          "qty": 1,
+          "unitPrice": 58,
+          "total": 58
+        }
+      ],
+      "subtotal": 204,
+      "deliveryFee": 30,
+      "grandTotal": 234
+    },
+    "createdAt": "2026-09-30T04:56:45.349Z"
+  }
+]
