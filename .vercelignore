@@ -1,0 +1,5 @@
+pharma.db
+node_modules
+.env
+*.bat
+.git
