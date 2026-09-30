@@ -5,320 +5,292 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login / Register — Kirti Pharma</title>
   <meta name="description" content="Login to your Kirti Pharma account. Access medicine orders, prescription history, and fast Gondia delivery.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css?v=2">
   <link rel="stylesheet" href="css/components.css?v=2">
   <link rel="stylesheet" href="css/responsive.css?v=2">
   <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
       min-height: 100vh;
       display: flex;
-      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       background-image: url('images/bg.jpeg');
       background-size: cover;
-      background-repeat: no-repeat;
       background-position: center;
       background-attachment: fixed;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      padding: 20px;
     }
 
-    .login-page-overlay {
+    body::before {
+      content: '';
       position: fixed;
       inset: 0;
-      background: rgba(15, 23, 42, 0.45);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
+      background: linear-gradient(135deg, rgba(0,35,20,0.72) 0%, rgba(15,23,42,0.65) 100%);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
       z-index: 0;
     }
 
-    .login-container {
+    .login-card {
       position: relative;
       z-index: 1;
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 24px 16px;
-    }
-
-    .login-card {
-      background: rgba(255, 255, 255, 0.96);
-      backdrop-filter: blur(16px);
-      border-radius: 20px;
-      padding: 36px 32px;
       width: 100%;
-      max-width: 440px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.18), 0 1px 3px rgba(0, 0, 0, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.8);
-      text-align: center;
-      animation: popIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      max-width: 420px;
+      background: rgba(255,255,255,0.97);
+      border-radius: 24px;
+      padding: 40px 36px 32px;
+      box-shadow: 0 32px 64px rgba(0,0,0,0.28), 0 0 0 1px rgba(255,255,255,0.6) inset;
+      animation: slideUp 0.35s cubic-bezier(0.16,1,0.3,1);
+    }
+    @keyframes slideUp {
+      from { transform: translateY(24px); opacity: 0; }
+      to   { transform: translateY(0);    opacity: 1; }
     }
 
-    @keyframes popIn {
-      from { transform: scale(0.95); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
-    }
+    .logo-wrap { display: flex; align-items: center; justify-content: center; margin-bottom: 26px; }
+    .logo-wrap img { height: 52px; object-fit: contain; }
 
-    .login-logo {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      margin-bottom: 20px;
-      text-decoration: none;
-    }
+    .login-title { text-align: center; margin-bottom: 26px; }
+    .login-title h1 { font-size: 1.45rem; font-weight: 800; color: #0f172a; letter-spacing: -0.3px; margin-bottom: 6px; }
+    .login-title p  { font-size: 0.84rem; color: #64748b; line-height: 1.5; }
 
-    .login-logo img {
-      height: 48px;
-      object-fit: contain;
-    }
-
-    .role-pills {
+    .auth-tabs {
       display: flex;
       background: #f1f5f9;
       border-radius: 12px;
       padding: 4px;
-      margin-bottom: 24px;
       gap: 4px;
+      margin-bottom: 22px;
     }
-
-    .role-pill {
-      flex: 1;
-      padding: 10px 14px;
-      border: none;
-      border-radius: 10px;
-      font-size: 13px;
-      font-weight: 700;
-      cursor: pointer;
-      background: transparent;
-      color: #64748b;
+    .auth-tab {
+      flex: 1; padding: 10px; border: none; border-radius: 9px;
+      font-size: 13.5px; font-weight: 700; font-family: inherit;
+      cursor: pointer; background: transparent; color: #64748b;
       transition: all 0.2s ease;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
+    }
+    .auth-tab.active {
+      background: #006642; color: #fff;
+      box-shadow: 0 4px 14px rgba(0,102,66,0.3);
     }
 
-    .role-pill.active {
-      background: #006642;
-      color: #ffffff;
-      box-shadow: 0 4px 12px rgba(0, 102, 66, 0.25);
+    .field { margin-bottom: 16px; }
+    .field label { display: block; font-size: 12.5px; font-weight: 600; color: #374151; margin-bottom: 7px; }
+    .field-wrap { position: relative; display: flex; align-items: center; }
+    .field-prefix { position: absolute; left: 14px; font-size: 14px; font-weight: 700; color: #64748b; pointer-events: none; }
+    .field input {
+      width: 100%; padding: 12px 14px;
+      font-size: 15px; font-family: inherit; color: #0f172a;
+      background: #f8fafc; border: 1.5px solid #e2e8f0;
+      border-radius: 11px; outline: none;
+      transition: border-color 0.18s, box-shadow 0.18s, background 0.18s;
     }
+    .field input.with-prefix { padding-left: 46px; }
+    .field input.with-suffix { padding-right: 46px; }
+    .field input:focus { border-color: #006642; background: #fff; box-shadow: 0 0 0 3.5px rgba(0,102,66,0.13); }
+    .field input::placeholder { color: #94a3b8; font-size: 14px; }
 
-    .form-group-custom {
-      text-align: left;
-      margin-bottom: 16px;
+    .pw-toggle {
+      position: absolute; right: 13px;
+      background: none; border: none; cursor: pointer;
+      font-size: 17px; color: #94a3b8; line-height: 1;
+      padding: 4px; display: flex; align-items: center;
+      transition: color 0.15s;
     }
+    .pw-toggle:hover { color: #475569; }
 
-    .form-group-custom label {
-      display: block;
-      font-size: 13px;
-      font-weight: 600;
-      color: #334155;
-      margin-bottom: 6px;
+    .btn-login {
+      width: 100%; padding: 14px; margin-top: 4px;
+      font-size: 15.5px; font-weight: 700; font-family: inherit;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #006642 0%, #00854f 100%);
+      color: #fff; border: none; cursor: pointer;
+      letter-spacing: 0.01em;
+      box-shadow: 0 6px 20px rgba(0,102,66,0.3);
+      transition: opacity 0.2s, transform 0.12s, box-shadow 0.2s;
     }
+    .btn-login:hover  { opacity: 0.92; box-shadow: 0 8px 26px rgba(0,102,66,0.38); }
+    .btn-login:active { transform: scale(0.985); }
+    .btn-login:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 
-    .input-phone-wrap {
-      position: relative;
-      display: flex;
-      align-items: center;
+    .helper-text { text-align: center; font-size: 12px; color: #94a3b8; margin-top: 14px; line-height: 1.5; }
+    .helper-text strong { color: #64748b; }
+
+    .db-badge {
+      display: inline-flex; align-items: center; gap: 7px;
+      font-size: 11.5px; font-weight: 600; color: #059669;
+      background: #ecfdf5; border: 1px solid #a7f3d0;
+      padding: 5px 12px; border-radius: 20px; margin-top: 22px;
     }
-
-    .input-phone-prefix {
-      position: absolute;
-      left: 14px;
-      font-weight: 700;
-      font-size: 14px;
-      color: #64748b;
-    }
-
-    .custom-phone-input {
-      width: 100%;
-      padding: 12px 14px 12px 50px !important;
-      font-size: 15px !important;
-      border: 1.5px solid #cbd5e1;
-      border-radius: 10px;
-      outline: none;
-      transition: border 0.2s;
-    }
-
-    .custom-phone-input:focus {
-      border-color: #006642;
-      box-shadow: 0 0 0 3px rgba(0, 102, 66, 0.12);
-    }
-
-    .custom-name-input {
-      width: 100%;
-      padding: 12px 14px !important;
-      font-size: 15px !important;
-      border: 1.5px solid #cbd5e1;
-      border-radius: 10px;
-      outline: none;
-      box-sizing: border-box;
-      transition: border 0.2s;
-    }
-
-    .custom-name-input:focus {
-      border-color: #006642;
-      box-shadow: 0 0 0 3px rgba(0, 102, 66, 0.12);
-    }
-
-    .btn-submit {
-      width: 100%;
-      padding: 13px;
-      font-size: 15px;
-      font-weight: 700;
-      border-radius: 10px;
-      background: #006642;
-      color: white;
-      border: none;
-      cursor: pointer;
-      transition: background 0.2s, transform 0.1s;
-    }
-
-    .btn-submit:hover {
-      background: #005034;
-    }
-
-    .btn-submit:active {
-      transform: scale(0.99);
-    }
-
-    .db-status-tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 12px;
-      color: #059669;
-      font-weight: 600;
-      background: #ecfdf5;
-      padding: 4px 10px;
-      border-radius: 20px;
-      margin-top: 18px;
-    }
-
-    .db-pulse {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: #10b981;
-      box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.4);
+    .db-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: #10b981; flex-shrink: 0;
       animation: pulse 1.8s infinite;
     }
-
     @keyframes pulse {
-      0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
-      70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
-      100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+      0%  { box-shadow: 0 0 0 0 rgba(16,185,129,0.7); }
+      70% { box-shadow: 0 0 0 5px rgba(16,185,129,0); }
+      100%{ box-shadow: 0 0 0 0 rgba(16,185,129,0); }
+    }
+
+    .back-link { display: block; text-align: center; margin-top: 18px; font-size: 13px; color: #006642; font-weight: 600; text-decoration: none; }
+    .back-link:hover { text-decoration: underline; }
+
+    @keyframes shake {
+      0%,100% { transform: translateX(0); }
+      20%,60%  { transform: translateX(-6px); }
+      40%,80%  { transform: translateX(6px); }
+    }
+    .shake { animation: shake 0.35s ease; }
+
+    #toast-container {
+      position: fixed; bottom: 24px; left: 50%;
+      transform: translateX(-50%); z-index: 9999;
+      display: flex; flex-direction: column; gap: 8px;
+      pointer-events: none;
     }
   </style>
 </head>
 <body>
 
-<div class="login-page-overlay"></div>
+<div class="login-card">
 
-<div class="login-container">
-  <div class="login-card">
-    
-    <!-- Brand Logo -->
-    <a href="index.html" class="login-logo" title="Back to Kirti Pharma Home">
+  <!-- Logo -->
+  <div class="logo-wrap">
+    <a href="index.html" title="Back to Kirti Pharma">
       <img src="images/kirti-logo.png" alt="Kirti Pharma">
     </a>
-
-    <!-- Header Description -->
-    <div id="login-intro-text">
-      <h3 style="margin: 0 0 6px; font-size: 1.25rem; font-weight: 800; color: #0f172a;" id="page-title">
-        Login / Register
-      </h3>
-      <p style="margin: 0 0 22px; font-size: 0.85rem; color: #64748b; line-height: 1.4;" id="page-sub">
-        Enter your mobile number &amp; password to access your account.
-      </p>
-    </div>
-
-    <!-- Login Form: Mobile + Password -->
-    <div id="screen-input">
-      <div class="form-group-custom" id="name-input-group">
-        <label for="input-customer-name">Full Name <span style="font-weight:400;color:#94a3b8">(New customers only)</span></label>
-        <input type="text" id="input-customer-name" class="custom-name-input" placeholder="e.g. Ramesh Patel">
-      </div>
-
-      <div class="form-group-custom">
-        <label for="input-customer-phone">Mobile Number</label>
-        <div class="input-phone-wrap">
-          <span class="input-phone-prefix">+91</span>
-          <input type="tel" id="input-customer-phone" class="custom-phone-input" placeholder="10-digit mobile number" maxlength="10">
-        </div>
-      </div>
-
-      <div class="form-group-custom">
-        <label for="input-customer-password">Password</label>
-        <div class="input-phone-wrap" style="position:relative">
-          <input type="password" id="input-customer-password" class="custom-name-input" placeholder="Enter your password" style="padding-right:44px">
-          <button type="button" onclick="togglePassword()" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#64748b;font-size:18px;line-height:1;" title="Show/Hide password" id="toggle-pw-btn">👁</button>
-        </div>
-      </div>
-
-      <button type="button" class="btn-submit" id="login-btn" onclick="doLogin()">
-        Login / Register
-      </button>
-
-      <div style="font-size: 12px; color: #94a3b8; margin-top: 14px;">
-        🔒 New customer? Enter a password to create your account.
-      </div>
-    </div>
-
-    <!-- Database Status Tag -->
-    <div class="db-status-tag">
-      <span class="db-pulse"></span>
-      <span>Connected to Supabase PostgreSQL Database</span>
-    </div>
-
-    <div style="margin-top: 20px; font-size: 13px;">
-      <a href="index.html" style="color: #006642; font-weight: 600; text-decoration: none;">← Return to Store</a>
-    </div>
-
   </div>
+
+  <!-- Title -->
+  <div class="login-title">
+    <h1 id="card-title">Welcome Back</h1>
+    <p id="card-sub">Enter your mobile number &amp; password to continue.</p>
+  </div>
+
+  <!-- Login / Register Tabs -->
+  <div class="auth-tabs" role="tablist">
+    <button class="auth-tab active" id="tab-login" onclick="switchTab('login')" role="tab">🔐 Login</button>
+    <button class="auth-tab" id="tab-register" onclick="switchTab('register')" role="tab">✨ Register</button>
+  </div>
+
+  <!-- Full Name (Register tab only) -->
+  <div class="field" id="name-field" style="display:none;">
+    <label for="input-name">Full Name</label>
+    <div class="field-wrap">
+      <input type="text" id="input-name" placeholder="e.g. Ramesh Patel" autocomplete="name">
+    </div>
+  </div>
+
+  <!-- Mobile Number -->
+  <div class="field">
+    <label for="input-phone">Mobile Number</label>
+    <div class="field-wrap">
+      <span class="field-prefix">+91</span>
+      <input type="tel" id="input-phone" class="with-prefix" placeholder="10-digit number" maxlength="10" inputmode="numeric" autocomplete="tel">
+    </div>
+  </div>
+
+  <!-- Password -->
+  <div class="field">
+    <label for="input-password">Password</label>
+    <div class="field-wrap">
+      <input type="password" id="input-password" class="with-suffix" placeholder="Minimum 4 characters" autocomplete="current-password">
+      <button type="button" class="pw-toggle" id="pw-toggle-btn" onclick="togglePw()" title="Show / hide password">👁</button>
+    </div>
+  </div>
+
+  <!-- Submit -->
+  <button type="button" class="btn-login" id="btn-submit" onclick="doAuth()">Login</button>
+
+  <p class="helper-text" id="helper-msg">
+    New here? Switch to <strong>Register</strong> to create your account.
+  </p>
+
+  <!-- DB Status -->
+  <div style="text-align:center;">
+    <div class="db-badge">
+      <span class="db-dot"></span>
+      <span>Connected to Supabase PostgreSQL</span>
+    </div>
+  </div>
+
+  <a href="index.html" class="back-link">← Return to Store</a>
+
 </div>
 
 <div id="toast-container"></div>
 
 <script src="js/app.js"></script>
 <script>
-function togglePassword() {
-  const pw = document.getElementById('input-customer-password');
-  const btn = document.getElementById('toggle-pw-btn');
-  if (pw.type === 'password') {
-    pw.type = 'text';
-    btn.textContent = '🙈';
-  } else {
-    pw.type = 'password';
-    btn.textContent = '👁';
-  }
+let activeTab = 'login';
+
+function switchTab(tab) {
+  activeTab = tab;
+  const isReg = tab === 'register';
+  document.getElementById('tab-login').classList.toggle('active', !isReg);
+  document.getElementById('tab-register').classList.toggle('active', isReg);
+  document.getElementById('name-field').style.display = isReg ? 'block' : 'none';
+  document.getElementById('card-title').textContent = isReg ? 'Create Account' : 'Welcome Back';
+  document.getElementById('card-sub').textContent   = isReg
+    ? 'Fill in your details to get started.'
+    : 'Enter your mobile number & password to continue.';
+  document.getElementById('btn-submit').textContent = isReg ? 'Create Account' : 'Login';
+  document.getElementById('helper-msg').innerHTML   = isReg
+    ? 'Already have an account? Switch to <strong>Login</strong>.'
+    : 'New here? Switch to <strong>Register</strong> to create your account.';
+  ['input-name','input-phone','input-password'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  document.getElementById('input-phone').focus();
 }
 
-async function doLogin() {
-  const phoneInput  = document.getElementById('input-customer-phone');
-  const nameInput   = document.getElementById('input-customer-name');
-  const pwInput     = document.getElementById('input-customer-password');
-  const btn         = document.getElementById('login-btn');
+function togglePw() {
+  const pw  = document.getElementById('input-password');
+  const btn = document.getElementById('pw-toggle-btn');
+  const hidden = pw.type === 'password';
+  pw.type         = hidden ? 'text' : 'password';
+  btn.textContent = hidden ? '🙈' : '👁';
+}
 
-  const phone    = (phoneInput.value  || '').replace(/[^0-9]/g, '').trim();
-  const name     = (nameInput.value   || '').trim();
-  const password = (pwInput.value     || '').trim();
+function shakeField(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.classList.remove('shake');
+  void el.offsetWidth;
+  el.classList.add('shake');
+}
+
+async function doAuth() {
+  const phoneEl = document.getElementById('input-phone');
+  const pwEl    = document.getElementById('input-password');
+  const nameEl  = document.getElementById('input-name');
+  const btn     = document.getElementById('btn-submit');
+
+  const phone    = (phoneEl.value || '').replace(/\D/g, '').trim();
+  const password = (pwEl.value   || '').trim();
+  const name     = nameEl ? (nameEl.value || '').trim() : '';
 
   if (!/^\d{10}$/.test(phone)) {
     showToast('Please enter a valid 10-digit mobile number', 'error');
-    phoneInput.focus();
-    return;
+    shakeField('input-phone'); phoneEl.focus(); return;
   }
-
   if (password.length < 4) {
     showToast('Password must be at least 4 characters', 'error');
-    pwInput.focus();
-    return;
+    shakeField('input-password'); pwEl.focus(); return;
+  }
+  if (activeTab === 'register' && !name) {
+    showToast('Please enter your full name', 'error');
+    shakeField('input-name'); nameEl.focus(); return;
   }
 
-  btn.disabled = true;
-  btn.textContent = 'Please wait…';
+  btn.disabled    = true;
+  btn.textContent = 'Please wait\u2026';
 
   try {
     const res  = await fetch('/api/auth/login', {
@@ -330,8 +302,8 @@ async function doLogin() {
 
     if (!data.success || !data.user) {
       showToast(data.error || 'Login failed. Please check your credentials.', 'error');
-      btn.disabled = false;
-      btn.textContent = 'Login / Register';
+      btn.disabled    = false;
+      btn.textContent = activeTab === 'register' ? 'Create Account' : 'Login';
       return;
     }
 
@@ -340,28 +312,27 @@ async function doLogin() {
     localStorage.setItem('kp_user_phone',       user.phone);
     localStorage.setItem('kp_user_name',        user.name);
     localStorage.setItem('kp_user_role',        user.role);
-    if (data.token)        localStorage.setItem('kp_token',          data.token);
-    if (user.addresses)    localStorage.setItem('kp_user_addresses', JSON.stringify(user.addresses));
+    if (data.token)     localStorage.setItem('kp_token',          data.token);
+    if (user.addresses) localStorage.setItem('kp_user_addresses', JSON.stringify(user.addresses));
 
     if (user.role === 'admin') {
-      showToast(`🧑‍⚕️ Welcome, ${user.name}! Opening Chemist Dashboard…`, 'success', 2000);
-      setTimeout(() => { window.location.href = 'dashboard.html'; }, 700);
+      showToast('\uD83E\uDDD1\u200D\u2695\uFE0F Welcome, ' + user.name + '! Opening Dashboard\u2026', 'success', 2000);
+      setTimeout(() => { window.location.href = 'dashboard.html'; }, 800);
     } else {
-      showToast(`✅ Welcome, ${user.name}! Opening store…`, 'success', 2000);
-      setTimeout(() => { window.location.href = 'index.html'; }, 700);
+      showToast('\u2705 Welcome, ' + user.name + '!', 'success', 2000);
+      setTimeout(() => { window.location.href = 'index.html'; }, 800);
     }
   } catch (err) {
     showToast('Connection error. Please try again.', 'error');
-    btn.disabled = false;
-    btn.textContent = 'Login / Register';
+    btn.disabled    = false;
+    btn.textContent = activeTab === 'register' ? 'Create Account' : 'Login';
   }
 }
 
-// Allow Enter key to submit
 document.addEventListener('DOMContentLoaded', () => {
-  ['input-customer-phone', 'input-customer-name', 'input-customer-password'].forEach(id => {
+  ['input-name','input-phone','input-password'].forEach(id => {
     const el = document.getElementById(id);
-    if (el) el.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+    if (el) el.addEventListener('keydown', e => { if (e.key === 'Enter') doAuth(); });
   });
 });
 </script>
